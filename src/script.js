@@ -182,7 +182,7 @@
         render(ctx) {
             let x = ctx.canvas.width / 2;
             let y = ctx.canvas.height / 2;
-            const color = ctx.createRadialGradient(x, y, 0, x, y, y);
+            const color = ctx.createRadialGradient(x, y, y /7, x, y, y);
             color.addColorStop(0, "#960");
             color.addColorStop(1, "#210");
             ctx.fillStyle = color;
@@ -206,9 +206,9 @@
 
         constructor(x, y) {
             this.pos = new Vec(x, y);
-            this.minSpeed = new Vec(2, 2);
-            this.maxSpeed = new Vec(3, 5);
-            this.jumpSpeed = new Vec(5, -5);
+            this.minSpeed = new Vec(1, 1);
+            this.maxSpeed = new Vec(4, 4);
+            this.jumpSpeed = new Vec(4, -4);
             this.velocity = new Vec(.1, .1);
             this.collider = new Circle(this.pos, 12);
             this.collide = new Vec();
@@ -227,7 +227,7 @@
                 const dot = line.project(collider.pos);
                 const vec = collider.pos.clone().sub(dot);
                 const distance = vec.mag();
-                if (distance <= collider.radius) {
+                if (distance < collider.radius) {
                     collider.pos.add(vec.div(distance).multiply(collider.radius - distance));
                     if (line.horizontal()) {
                         collide.x = 1;
@@ -243,17 +243,21 @@
             this.collide = collide;
         }
 
+        turn() {
+            this.velocity.x = -this.velocity.x;
+            this.speed.x = this.velocity.x < 0
+                ? -this.jumpSpeed.x
+                : this.jumpSpeed.x;
+
+        }
+
         jump() {
             const collide = this.collide;
             if (collide.x || collide.y) {
                 this.speed.y = this.jumpSpeed.y;
                 if (collide.y && !collide.x) {
-                    this.velocity.x = -this.velocity.x;
-                    this.speed.x = this.velocity.x < 0
-                        ? -this.jumpSpeed.x
-                        : this.jumpSpeed.x;
+                    this.turn();
                 }
-
             }
         }
 
@@ -295,7 +299,7 @@
     const cam = new Camera($("#cam"), 300);
     const hero = new Hero(250, 155);
     const room = new Room([50, 50, 50, 750,
-        300, 750, 300, 200, 500, 200, 500, 750,
+        180, 750, 180, 200, 620, 200, 620, 750,
         750, 750, 750, 50]);
 
     function anim() {
