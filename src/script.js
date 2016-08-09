@@ -307,9 +307,13 @@
     }
 
     window.onload = function (e) {
-        on(document, "mousedown", function () {
-            hero.jump();
+        on(document, "touchstart", function () {
             e.preventDefault();
+            hero.jump();
+        });
+        on(document, "mousedown", function () {
+            e.preventDefault();
+            hero.jump();
         });
         on(document, "keydown", function (e) {
             if (e.keyCode == 32) {
