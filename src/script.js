@@ -46,12 +46,28 @@
             return new Vec(this.x, this.y);
         }
 
+        eq(vec) {
+            return this.x == vec.x && this.y == vec.y;
+        }
+
         mag() {
             return Math.sqrt(this.x * this.x + this.y * this.y);
         }
 
-        eq(vec) {
-            return this.x == vec.x && this.y == vec.y;
+        max(vec) {
+            if (this.x > vec.x) {
+                this.x = vec.x;
+            }
+            if (this.x < -vec.x) {
+                this.x = -vec.x;
+            }
+            if (this.y > vec.y) {
+                this.y = vec.y;
+            }
+            if (this.y < -vec.y) {
+                this.y = -vec.y;
+            }
+            return this;
         }
 
         add(vec) {
@@ -89,6 +105,12 @@
             return this;
         }
 
+        zero() {
+            this.x = 0;
+            this.y = 0;
+            return this;
+        }
+
     }
 
     class Line {
@@ -115,18 +137,26 @@
             return b.clone().multiply(param).add(this.begin);
         }
 
+        vertical() {
+            return this.begin.x == this.end.x;
+        }
+
+        horizontal() {
+            return this.begin.y == this.end.y;
+        }
+
     }
 
     class Circle {
 
-        constructor(center, radius) {
-            this.center = center;
+        constructor(pos, radius) {
+            this.pos = pos;
             this.radius = radius;
         }
 
         render(ctx, collide) {
             ctx.beginPath();
-            ctx.arc(this.center.x, this.center.y, this.radius, 0, 2 * Math.PI, false);
+            ctx.arc(this.pos.x, this.pos.y, this.radius, 0, 2 * Math.PI, false);
             ctx.fillStyle = collide ? "red" : "green";
             ctx.fill();
         }
@@ -145,6 +175,9 @@
                 lines.push(new Line(dots[j], dots[++j]));
             }
             lines.push(new Line(dots[j], dots[0]));
+            lines.sort(function (a, b) {
+                return a.vertical() && b.horizontal() ? -1 : 0;
+            });
             this.dots = dots;
             this.lines = lines;
         }
@@ -171,33 +204,68 @@
 
         constructor(x, y) {
             this.pos = new Vec(x, y);
-            this.speed = new Vec(.3, .5);
-            this.collider = new Circle(this.pos, 11);
+            this.minSpeed = new Vec(.1, .1);
+            this.maxSpeed = new Vec(.2, .5);
+            this.jumpSpeed = new Vec(.7, -.5);
+            this.velocity = new Vec(.01, .01);
+            this.collider = new Circle(this.pos, 11.5);
+            this.collide = new Vec();
+            this.speed = this.minSpeed.clone();
             this.time = new Date().getTime();
         }
 
         anim(room) {
             const time = new Date().getTime();
-            const circle = this.collider;
-            const speed = this.speed.clone().multiply(time - this.time);
-            this.time = time;
-            circle.center.add(speed);
-            room.lines.forEach(function(line) {
-                const dot = line.project(circle.center);
-                const vec = circle.center.clone().sub(dot);
+            const collider = this.collider;
+            const collide = new Vec();
+            const speed = this.speed
+                .add(this.velocity)
+                .max(this.maxSpeed)
+                .clone()
+                .multiply(time - this.time);
+            collider.pos.add(speed);
+            room.lines.forEach(function (line) {
+                const dot = line.project(collider.pos);
+                const vec = collider.pos.clone().sub(dot);
                 const distance = vec.mag();
-                if (distance <= circle.radius) {
-                    circle.center.add(vec.div(distance).multiply(circle.radius - distance));
+                if (distance <= collider.radius) {
+                    collider.pos.add(vec.div(distance).multiply(collider.radius - distance));
+                    if (line.horizontal()) {
+                        collide.x = 1;
+                    }
+                    if (line.vertical()) {
+                        collide.y = 1;
+                    }
                 }
             });
+            if (collide.x || (collide.y && !this.collide.y)) {
+                this.speed.y = this.minSpeed.y;
+            }
+            this.collide = collide;
+            this.time = time;
+        }
+
+        jump() {
+            const collide = this.collide;
+            if (collide.x || collide.y) {
+                this.speed.y = this.jumpSpeed.y;
+                if (collide.y && ! collide.x) {
+                    this.velocity.x = -this.velocity.x;
+                    this.speed.x = this.velocity.x < 0
+                        ? -this.jumpSpeed.x 
+                        : this.jumpSpeed.x;
+                }
+                
+            }
         }
 
     }
 
     const ctx = $("#game").getContext("2d");
-    const hero = new Hero(270, 200);
+    const cam = $("#camera").getContext("2d");
+    const hero = new Hero(100, 500);
     const room = new Room([10, 10, 10, 790,
-        380, 790, 380, 400, 420, 400, 420, 790,
+        300, 790, 300, 200, 500, 200, 500, 790,
         790, 790, 790, 10]);
 
     function anim() {
@@ -207,6 +275,14 @@
         hero.collider.render(ctx);
     }
 
-    window.onload = anim;
+    window.onload = function () {
+        on(document, "mousedown", function () {
+            hero.jump();
+        });
+        on(document, "keydown", function () {
+            hero.jump();
+        });
+        anim();
+    };
 
 })();
