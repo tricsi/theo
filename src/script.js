@@ -180,7 +180,12 @@
         }
 
         render(ctx) {
-            ctx.fillStyle = "black";
+            let x = ctx.canvas.width / 2;
+            let y = ctx.canvas.height / 2;
+            const color = ctx.createRadialGradient(x, y, 0, x, y, y);
+            color.addColorStop(0, "#960");
+            color.addColorStop(1, "#210");
+            ctx.fillStyle = color;
             ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
             let dot = this.dots[0];
@@ -201,25 +206,22 @@
 
         constructor(x, y) {
             this.pos = new Vec(x, y);
-            this.minSpeed = new Vec(.1, .1);
-            this.maxSpeed = new Vec(.2, .5);
-            this.jumpSpeed = new Vec(.3, -.5);
-            this.velocity = new Vec(.01, .01);
+            this.minSpeed = new Vec(2, 2);
+            this.maxSpeed = new Vec(3, 5);
+            this.jumpSpeed = new Vec(5, -5);
+            this.velocity = new Vec(.1, .1);
             this.collider = new Circle(this.pos, 12);
             this.collide = new Vec();
             this.speed = this.minSpeed.clone();
-            this.time = new Date().getTime();
         }
 
         anim(room) {
-            const time = new Date().getTime();
             const collider = this.collider;
             const collide = new Vec();
             const speed = this.speed
                 .add(this.velocity)
                 .max(this.maxSpeed)
-                .clone()
-                .multiply(time - this.time);
+                .clone();
             collider.pos.add(speed);
             room.lines.forEach(function (line) {
                 const dot = line.project(collider.pos);
@@ -239,7 +241,6 @@
                 this.speed.y = this.minSpeed.y;
             }
             this.collide = collide;
-            this.time = time;
         }
 
         jump() {
@@ -310,8 +311,10 @@
             hero.jump();
             e.preventDefault();
         });
-        on(document, "keydown", function () {
-            hero.jump();
+        on(document, "keydown", function (e) {
+            if (e.keyCode == 32) {
+                hero.jump();
+            }
         });
         on(window, "resize", function () {
             cam.resize();
