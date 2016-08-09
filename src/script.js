@@ -171,8 +171,8 @@
 
         constructor(x, y) {
             this.pos = new Vec(x, y);
-            this.speed = new Vec(.5, .7);
-            this.collider = new Circle(this.pos, 40);
+            this.speed = new Vec(.3, .5);
+            this.collider = new Circle(this.pos, 11);
             this.time = new Date().getTime();
         }
 
@@ -181,27 +181,21 @@
             const circle = this.collider;
             const speed = this.speed.clone().multiply(time - this.time);
             this.time = time;
+            circle.center.add(speed);
             room.lines.forEach(function(line) {
                 const dot = line.project(circle.center);
                 const vec = circle.center.clone().sub(dot);
                 const distance = vec.mag();
                 if (distance <= circle.radius) {
-                    if (Math.round(vec.x) != 0) {
-                        speed.x = 0;
-                    }
-                    if (Math.round(vec.y) != 0) {
-                        speed.y = 0;
-                    }
                     circle.center.add(vec.div(distance).multiply(circle.radius - distance));
                 }
             });
-            this.pos.add(speed);
         }
 
     }
 
     const ctx = $("#game").getContext("2d");
-    const hero = new Hero(160, 400);
+    const hero = new Hero(270, 200);
     const room = new Room([10, 10, 10, 790,
         380, 790, 380, 400, 420, 400, 420, 790,
         790, 790, 790, 10]);
