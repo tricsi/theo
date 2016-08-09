@@ -78,6 +78,12 @@
             return this;
         }
 
+        invert() {
+            this.x = -this.x;
+            this.y = -this.y;
+            return this;
+        }
+
         norm() {
             this.div(this.mag());
             return this;
@@ -93,7 +99,7 @@
             this.vec = end.clone().sub(begin).norm();
         }
 
-        closest(dot) {
+        project(dot) {
             let vec;
             let param = -1;
             let a = dot.clone().sub(this.begin);
@@ -116,24 +122,6 @@
         constructor(center, radius) {
             this.center = center;
             this.radius = radius;
-        }
-
-        collide(lines) {
-            const collide = [];
-            const center = this.center;
-            lines.forEach(function(line) {
-                const pos = line.closest(this.center);
-                if (this.center.clone().sub(dot).mag() <= this.radius) {
-                    collide.push(pos);
-                }
-            });
-            for (let i=0 ; i<lines.length; i++) {
-                const pos = lines[i].closest(this.center);
-                if (this.center.clone().sub(dot).mag() <= this.radius) {
-                    collide.push(pos);
-                }
-            }
-            return collide;
         }
 
         render(ctx, collide) {
@@ -183,17 +171,19 @@
 
         constructor(x, y) {
             this.pos = new Vec(x, y);
-            this.speed = new Vec(1, 1);
+            this.speed = new Vec(.5, .7);
             this.collider = new Circle(this.pos, 40);
+            this.time = new Date().getTime();
         }
 
         anim(room) {
-            const collide = [];
+            const time = new Date().getTime();
             const circle = this.collider;
-            const speed = this.speed.clone();
+            const speed = this.speed.clone().multiply(time - this.time);
+            this.time = time;
             room.lines.forEach(function(line) {
-                const closest = line.closest(circle.center);
-                const vec = circle.center.clone().sub(closest);
+                const dot = line.project(circle.center);
+                const vec = circle.center.clone().sub(dot);
                 const distance = vec.mag();
                 if (distance <= circle.radius) {
                     if (Math.round(vec.x) != 0) {
@@ -202,6 +192,7 @@
                     if (Math.round(vec.y) != 0) {
                         speed.y = 0;
                     }
+                    circle.center.add(vec.div(distance).multiply(circle.radius - distance));
                 }
             });
             this.pos.add(speed);
@@ -210,7 +201,7 @@
     }
 
     const ctx = $("#game").getContext("2d");
-    const hero = new Hero(100, 600);
+    const hero = new Hero(160, 400);
     const room = new Room([10, 10, 10, 790,
         380, 790, 380, 400, 420, 400, 420, 790,
         790, 790, 790, 10]);
