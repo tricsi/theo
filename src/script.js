@@ -175,9 +175,6 @@
                 lines.push(new Line(dots[j], dots[++j]));
             }
             lines.push(new Line(dots[j], dots[0]));
-            lines.sort(function (a, b) {
-                return a.vertical() && b.horizontal() ? -1 : 0;
-            });
             this.dots = dots;
             this.lines = lines;
         }
@@ -206,9 +203,9 @@
             this.pos = new Vec(x, y);
             this.minSpeed = new Vec(.1, .1);
             this.maxSpeed = new Vec(.2, .5);
-            this.jumpSpeed = new Vec(.7, -.5);
+            this.jumpSpeed = new Vec(.3, -.5);
             this.velocity = new Vec(.01, .01);
-            this.collider = new Circle(this.pos, 11.5);
+            this.collider = new Circle(this.pos, 12);
             this.collide = new Vec();
             this.speed = this.minSpeed.clone();
             this.time = new Date().getTime();
@@ -249,38 +246,75 @@
             const collide = this.collide;
             if (collide.x || collide.y) {
                 this.speed.y = this.jumpSpeed.y;
-                if (collide.y && ! collide.x) {
+                if (collide.y && !collide.x) {
                     this.velocity.x = -this.velocity.x;
                     this.speed.x = this.velocity.x < 0
-                        ? -this.jumpSpeed.x 
+                        ? -this.jumpSpeed.x
                         : this.jumpSpeed.x;
                 }
-                
+
             }
         }
 
     }
 
+    class Camera {
+
+        constructor(canvas, size) {
+            const ctx = canvas.getContext("2d");
+            ctx.imageSmoothingEnabled = false;
+            ctx.msImageSmoothingEnabled = false;
+            ctx.mozImageSmoothingEnabled = false;
+            ctx.webkitImageSmoothingEnabled = false;
+            this.ctx = ctx;
+            this.size = size;
+            this.resize();
+        }
+
+        resize() {
+            const canvas = this.ctx.canvas;
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+            this.aspect = canvas.width / canvas.height;
+            this.scale = this.aspect > 1 ? canvas.height / this.size : canvas.width / this.size;
+        }
+
+        render(ctx, pos) {
+            const canvas = this.ctx.canvas;
+            let s = this.scale;
+            let w = Math.ceil(canvas.width / s);
+            let h = Math.ceil(canvas.height / s);
+            this.ctx.fillRect(0, 0, canvas.width, canvas.height);
+            this.ctx.drawImage(ctx.canvas, pos.x - w / 2, pos.y - h / 2, w, h, 0, 0, w * s, h * s);
+        }
+
+    }
+
     const ctx = $("#game").getContext("2d");
-    const cam = $("#camera").getContext("2d");
-    const hero = new Hero(100, 500);
-    const room = new Room([10, 10, 10, 790,
-        300, 790, 300, 200, 500, 200, 500, 790,
-        790, 790, 790, 10]);
+    const cam = new Camera($("#cam"), 300);
+    const hero = new Hero(250, 155);
+    const room = new Room([50, 50, 50, 750,
+        300, 750, 300, 200, 500, 200, 500, 750,
+        750, 750, 750, 50]);
 
     function anim() {
         window.requestAnimationFrame(anim);
         room.render(ctx);
         hero.anim(room);
         hero.collider.render(ctx);
+        cam.render(ctx, hero.pos);
     }
 
-    window.onload = function () {
+    window.onload = function (e) {
         on(document, "mousedown", function () {
             hero.jump();
+            e.preventDefault();
         });
         on(document, "keydown", function () {
             hero.jump();
+        });
+        on(window, "resize", function () {
+            cam.resize();
         });
         anim();
     };
