@@ -180,8 +180,14 @@
         }
 
         render(ctx) {
-            this.renderBack(ctx);
-            this.renderWalls(ctx);
+            if (this.img) {
+                ctx.drawImage(this.img, 0, 0);
+            } else {
+                this.renderBack(ctx);
+                this.renderWalls(ctx);
+                this.img = new Image();
+                this.img.src = ctx.canvas.toDataURL();
+            }
         }
 
         renderBack(ctx) {
