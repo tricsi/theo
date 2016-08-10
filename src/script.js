@@ -328,7 +328,7 @@
 
     const cam = new Camera($("#cam"), 300);
     const ctx = $("#game").getContext("2d");
-    const room = new Room([5, 75, 50, 60, 20, 20, 60, 75, 75, 5, 5], 10);
+    const room = new Room([5, 75, 50, 60, 20, 20, 60, 30, 30, 40, 60, 75, 75, 5, 5], 10);
     const hero = new Hero(250, 155);
 
     function anim() {
