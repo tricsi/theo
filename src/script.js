@@ -165,13 +165,13 @@
 
     class Room {
 
-        constructor(map) {
+        constructor(map, grid) {
             let dots = [];
             let lines = [];
             let j = 0;
-            dots.push(new Vec(map[0], map[1]));
+            dots.push(new Vec(map[0] * grid, map[1] * grid));
             for (let i = 2; i < map.length; i++) {
-                dots.push(new Vec(map[i], map[++i]));
+                dots.push(new Vec(map[i] * grid, map[++i] * grid));
                 lines.push(new Line(dots[j], dots[++j]));
             }
             lines.push(new Line(dots[j], dots[0]));
@@ -180,14 +180,23 @@
         }
 
         render(ctx) {
-            let x = ctx.canvas.width / 2;
-            let y = ctx.canvas.height / 2;
+            this.renderBack(ctx);
+            this.renderWalls(ctx);
+        }
+
+        renderBack(ctx) {
+            let w = ctx.canvas.width;
+            let h = ctx.canvas.height;
+            let x = w / 2;
+            let y = h / 2;
             const color = ctx.createRadialGradient(x, y, 0, x, y, y);
             color.addColorStop(0, "#960");
             color.addColorStop(1, "#210");
             ctx.fillStyle = color;
-            ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            ctx.fillRect(0, 0, w, h);
+        }
 
+        renderWalls(ctx) {
             let dot = this.dots[0];
             ctx.beginPath();
             ctx.fillStyle = "white";
@@ -291,12 +300,10 @@
 
     }
 
-    const ctx = $("#game").getContext("2d");
     const cam = new Camera($("#cam"), 300);
+    const ctx = $("#game").getContext("2d");
+    const room = new Room([5, 5, 5, 75, 20, 75, 20, 20, 60, 20, 60, 75, 75, 75, 75, 5], 10);
     const hero = new Hero(250, 155);
-    const room = new Room([50, 50, 50, 750,
-        300, 750, 300, 200, 500, 200, 500, 750,
-        750, 750, 750, 50]);
 
     function anim() {
         window.requestAnimationFrame(anim);
