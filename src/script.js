@@ -170,8 +170,11 @@
             let lines = [];
             let j = 0;
             dots.push(new Vec(map[0] * grid, map[1] * grid));
-            for (let i = 2; i < map.length; i++) {
-                dots.push(new Vec(map[i] * grid, map[++i] * grid));
+            for (let i = 1; i < map.length - 1; i++) {
+                if (i % 2)
+                    dots.push(new Vec(map[i + 1] * grid, map[i] * grid));
+                else
+                    dots.push(new Vec(map[i] * grid, map[i + 1] * grid));
                 lines.push(new Line(dots[j], dots[++j]));
             }
             lines.push(new Line(dots[j], dots[0]));
@@ -312,7 +315,7 @@
 
     const cam = new Camera($("#cam"), 300);
     const ctx = $("#game").getContext("2d");
-    const room = new Room([5, 5, 5, 75, 20, 75, 20, 20, 60, 20, 60, 75, 75, 75, 75, 5], 10);
+    const room = new Room([5, 75, 20, 20, 60, 75, 75, 5, 5], 10);
     const hero = new Hero(250, 155);
 
     function anim() {
