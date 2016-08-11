@@ -454,8 +454,8 @@
 
     const ctx = $("#game").getContext("2d");
     const cam = new Camera($("#cam").getContext("2d"), 300);
-    const room = new Room([5, 75, 50, 60, 20, 20, 60, 30, 30, 40, 60, 75, 75, 5, 5], 10);
-    const hero = new Hero(250, 155);
+    const room = new Room([1, 32, 25, 29, 4, 4, 29, 7, 7, 10, 29, 13, 7, 22, 26, 19, 10, 16, 29, 32, 32, 1, 1], 24);
+    const hero = new Hero(250, 48);
     const renderer = new Renderer(ctx);
     const sprite = new Sprite(renderer);
 
@@ -470,6 +470,7 @@
         window.requestAnimationFrame(anim);
         room.render(ctx);
         hero.anim(room);
+        const vec = hero.speed.clone().norm();
         renderer
             .begin()
             .to(hero.pos, hero.pos)
@@ -477,13 +478,14 @@
             .fill("grey")
             .stroke("black")
             .begin()
-            .to(0, -3)
+            .to(vec.x, vec.y - 3)
             .ellipse(5)
             .fill("white")
-            .ellipse(2.3)
+            .to(vec.x, vec.y)
+            .ellipse(2.1)
             .fill("black")
             .end()
-            .to(-3, 5)
+            .to(-3 - vec.x, vec.y + 5)
             .rect(6, 1)
             .fill("black")
             .end();
@@ -507,10 +509,10 @@
         on(window, "resize", function () {
             cam.resize();
         });
-        smooth(cam.ctx, false);
-        smooth(ctx, false);
+        //smooth(cam.ctx, false);
+        //smooth(ctx, false);
         sprite.render(-1, 0);
-        //anim();
+        anim();
     };
 
 })();
