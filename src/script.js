@@ -129,10 +129,8 @@
             if (!this.begin.eq(this.end)) {
                 param = (a.x * b.x + a.y * b.y) / (b.x * b.x + b.y * b.y);
             }
-            if (param < 0) {
-                return this.begin.clone();
-            } else if (param > 1) {
-                return this.end.clone();
+            if (param <= 0 || param >= 1) {
+                return false;
             }
             return b.clone().multiply(param).add(this.begin);
         }
@@ -237,11 +235,12 @@
 
         constructor(x, y) {
             this.pos = new Vec(x, y);
-            this.minSpeed = new Vec(1, 1);
-            this.maxSpeed = new Vec(4, 4);
-            this.jumpSpeed = new Vec(4, -4);
-            this.velocity = new Vec(.1, .1);
-            this.collider = new Circle(this.pos, 12);
+            this.size = 11;
+            this.minSpeed = new Vec(0, 0);
+            this.maxSpeed = new Vec(3, 5);
+            this.jumpSpeed = new Vec(3, -5);
+            this.velocity = new Vec(.1, .15);
+            this.collider = new Circle(this.pos, this.size);
             this.collide = new Vec();
             this.speed = this.minSpeed.clone();
         }
@@ -256,15 +255,18 @@
             collider.pos.add(speed);
             room.lines.forEach(function (line) {
                 const dot = line.project(collider.pos);
+                if (!dot) {
+                    return;
+                }
                 const vec = collider.pos.clone().sub(dot);
                 const distance = vec.mag();
                 if (distance < collider.radius) {
                     collider.pos.add(vec.div(distance).multiply(collider.radius - distance));
-                    if (line.horizontal()) {
-                        collide.x = 1;
-                    }
                     if (line.vertical()) {
                         collide.y = 1;
+                    }
+                    if (line.horizontal()) {
+                        collide.x = 1;
                     }
                 }
             });
@@ -296,12 +298,7 @@
 
     class Camera {
 
-        constructor(canvas, size) {
-            const ctx = canvas.getContext("2d");
-            ctx.imageSmoothingEnabled = false;
-            ctx.msImageSmoothingEnabled = false;
-            ctx.mozImageSmoothingEnabled = false;
-            ctx.webkitImageSmoothingEnabled = false;
+        constructor(ctx, size) {
             this.ctx = ctx;
             this.size = size;
             this.resize();
@@ -326,10 +323,17 @@
 
     }
 
-    const cam = new Camera($("#cam"), 300);
     const ctx = $("#game").getContext("2d");
+    const cam = new Camera($("#cam").getContext("2d"), 300);
     const room = new Room([5, 75, 50, 60, 20, 20, 60, 30, 30, 40, 60, 75, 75, 5, 5], 10);
     const hero = new Hero(250, 155);
+
+    function smooth(ctx, enabled) {
+        ctx.imageSmoothingEnabled = enabled;
+        ctx.msImageSmoothingEnabled = enabled;
+        ctx.mozImageSmoothingEnabled = enabled;
+        ctx.webkitImageSmoothingEnabled = enabled;
+    }
 
     function anim() {
         window.requestAnimationFrame(anim);
@@ -356,6 +360,7 @@
         on(window, "resize", function () {
             cam.resize();
         });
+        smooth(cam.ctx, false);
         anim();
     };
 
