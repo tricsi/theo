@@ -306,7 +306,7 @@
 
     }
 
-    class Sprite {
+    class Renderer {
 
         constructor(ctx) {
             this.ctx = ctx;
@@ -322,12 +322,22 @@
             return this;
         }
 
+        scale(x, y) {
+            this.ctx.scale(x, y || x);
+            return this;
+        }
+
         to(x, y) {
             if (x instanceof Vec) {
                 y = x.y;
                 x = x.x;
             }
             this.ctx.translate(x, y);
+            return this;
+        }
+
+        rotate(angle) {
+            this.ctx.rotate(2 * Math.PI / angle);
             return this;
         }
 
@@ -345,25 +355,107 @@
             return this;
         }
 
-        circle(radius) {
-            const ctx = this.ctx;
-            ctx.beginPath();
-            ctx.arc(0, 0, radius, 0, 2 * Math.PI, false);
-            return this;
-        }
-
         rect(width, height) {
             this.ctx.rect(0, 0, width, height);
             return this;
         }
 
+        circle(radius) {
+            const ctx = this.ctx;
+            ctx.beginPath();
+            ctx.arc(0, 0, radius, 0, 2 * Math.PI, false);
+            ctx.closePath();
+            return this;
+        }
+
+        ngon(num, rad, rad2) {
+            const ctx = this.ctx;
+            ctx.beginPath();
+            for (let i = 0; i < num; i++) {
+                let a = Math.PI * 2 / num;
+                if (i > 0) {
+                    let b = a * i;
+                    ctx.lineTo(Math.sin(b) * rad, Math.cos(b) * rad);
+                } else {
+                    ctx.moveTo(0, rad);
+                }
+                if (rad2) {
+                    let c = a * (i + 0.5);
+                    ctx.lineTo(Math.sin(c) * rad2, Math.cos(c) * rad2);
+                }
+            }
+            ctx.closePath();
+            return this;
+        }
+
+    }
+
+    class Sprite {
+
+        constructor(renderer) {
+            this.renderer = renderer;
+        }
+
+        render() {
+            const renderer = this.renderer;
+            renderer.begin();
+            for (let a=0; a<3; a++) {
+                renderer.begin().to(a*24, 0);
+                this.cog(a * 10);
+                renderer.end();
+            }
+            renderer.to(0, 24);
+            for (let y=1; y>-2; y--) {
+                for (let x=-1; x<2; x++) {
+                    renderer.begin().to(x*24+24, y*24+24);
+                    this.teo(x, y);
+                    renderer.end();
+                }
+            }
+            renderer.end();
+        }
+
+        cog(a) {
+            this.renderer
+                .begin()
+                .to(12, 12)
+                .rotate(a)
+                .ngon(12, 10.5, 8)
+                .fill("grey")
+                .stroke("black")
+                .circle(2.3)
+                .fill("black")
+                .end();
+        }
+
+        teo(x, y) {
+            this.renderer
+                .begin()
+                .to(12, 12)
+                .circle(10.5)
+                .fill("grey")
+                .stroke("black")
+                .begin()
+                .to(x, y-3)
+                .circle(5)
+                .fill("white")
+                .to(x, y)
+                .circle(2.3)
+                .fill("black")
+                .end()
+                .to(-3-x, 5+y)
+                .rect(6, 1)
+                .fill("black")
+                .end();
+        }
     }
 
     const ctx = $("#game").getContext("2d");
     const cam = new Camera($("#cam").getContext("2d"), 300);
     const room = new Room([5, 75, 50, 60, 20, 20, 60, 30, 30, 40, 60, 75, 75, 5, 5], 10);
     const hero = new Hero(250, 155);
-    const sprite = new Sprite(ctx);
+    const renderer = new Renderer(ctx);
+    const sprite = new Sprite(renderer);
 
     function smooth(ctx, enabled) {
         ctx.imageSmoothingEnabled = enabled;
@@ -376,17 +468,20 @@
         window.requestAnimationFrame(anim);
         room.render(ctx);
         hero.anim(room);
-        sprite.begin()
-            .to(hero.pos)
-            .circle(hero.size - .5)
+        renderer
+            .begin()
+            .to(hero.pos, hero.pos)
+            .circle(10.5)
             .fill("grey")
             .stroke("black")
+            .begin()
             .to(0, -3)
-            .circle(6)
+            .circle(5)
             .fill("white")
-            .circle(2)
+            .circle(2.3)
             .fill("black")
-            .to(-1, 8)
+            .end()
+            .to(-3, 5)
             .rect(6, 1)
             .fill("black")
             .end();
@@ -412,6 +507,7 @@
         });
         smooth(cam.ctx, false);
         smooth(ctx, false);
+        sprite.render(-1, 0);
         anim();
     };
 
