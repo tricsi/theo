@@ -312,6 +312,25 @@
             this.ctx = ctx;
         }
 
+        begin() {
+            this.ctx.save();
+            return this;
+        }
+
+        end() {
+            this.ctx.restore();
+            return this;
+        }
+
+        to(x, y) {
+            if (x instanceof Vec) {
+                y = x.y;
+                x = x.x;
+            }
+            this.ctx.translate(x, y);
+            return this;
+        }
+
         fill(color) {
             const ctx = this.ctx;
             ctx.fillStyle = color;
@@ -326,10 +345,15 @@
             return this;
         }
 
-        circle(center, radius) {
+        circle(radius) {
             const ctx = this.ctx;
             ctx.beginPath();
-            ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI, false);
+            ctx.arc(0, 0, radius, 0, 2 * Math.PI, false);
+            return this;
+        }
+
+        rect(width, height) {
+            this.ctx.rect(0, 0, width, height);
             return this;
         }
 
@@ -352,9 +376,20 @@
         window.requestAnimationFrame(anim);
         room.render(ctx);
         hero.anim(room);
-        sprite.circle(hero.pos, hero.size)
+        sprite.begin()
+            .to(hero.pos)
+            .circle(hero.size - .5)
             .fill("grey")
-            .stroke("black");
+            .stroke("black")
+            .to(0, -3)
+            .circle(6)
+            .fill("white")
+            .circle(2)
+            .fill("black")
+            .to(-1, 8)
+            .rect(6, 1)
+            .fill("black")
+            .end();
         cam.render(ctx, hero.pos);
     }
 
@@ -376,6 +411,7 @@
             cam.resize();
         });
         smooth(cam.ctx, false);
+        smooth(ctx, false);
         anim();
     };
 
