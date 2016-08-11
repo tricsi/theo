@@ -145,22 +145,6 @@
 
     }
 
-    class Circle {
-
-        constructor(pos, radius) {
-            this.pos = pos;
-            this.radius = radius;
-        }
-
-        render(ctx, collide) {
-            ctx.beginPath();
-            ctx.arc(this.pos.x, this.pos.y, this.radius, 0, 2 * Math.PI, false);
-            ctx.fillStyle = collide ? "red" : "green";
-            ctx.fill();
-        }
-
-    }
-
     class Room {
 
         constructor(map, grid) {
@@ -240,28 +224,27 @@
             this.maxSpeed = new Vec(3, 5);
             this.jumpSpeed = new Vec(3, -5);
             this.velocity = new Vec(.1, .15);
-            this.collider = new Circle(this.pos, this.size);
             this.collide = new Vec();
             this.speed = this.minSpeed.clone();
         }
 
         anim(room) {
-            const collider = this.collider;
             const collide = new Vec();
+            const size = this.size;
             const speed = this.speed
                 .add(this.velocity)
                 .max(this.maxSpeed)
                 .clone();
-            collider.pos.add(speed);
+            const pos = this.pos.add(speed);
             room.lines.forEach(function (line) {
-                const dot = line.project(collider.pos);
+                const dot = line.project(pos);
                 if (!dot) {
                     return;
                 }
-                const vec = collider.pos.clone().sub(dot);
+                const vec = pos.clone().sub(dot);
                 const distance = vec.mag();
-                if (distance < collider.radius) {
-                    collider.pos.add(vec.div(distance).multiply(collider.radius - distance));
+                if (distance < size) {
+                    pos.add(vec.div(distance).multiply(size - distance));
                     if (line.vertical()) {
                         collide.y = 1;
                     }
@@ -323,10 +306,40 @@
 
     }
 
+    class Sprite {
+
+        constructor(ctx) {
+            this.ctx = ctx;
+        }
+
+        fill(color) {
+            const ctx = this.ctx;
+            ctx.fillStyle = color;
+            ctx.fill();
+            return this;
+        }
+
+        stroke(color) {
+            const ctx = this.ctx;
+            ctx.strokeStyle = color;
+            ctx.stroke();
+            return this;
+        }
+
+        circle(center, radius) {
+            const ctx = this.ctx;
+            ctx.beginPath();
+            ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI, false);
+            return this;
+        }
+
+    }
+
     const ctx = $("#game").getContext("2d");
     const cam = new Camera($("#cam").getContext("2d"), 300);
     const room = new Room([5, 75, 50, 60, 20, 20, 60, 30, 30, 40, 60, 75, 75, 5, 5], 10);
     const hero = new Hero(250, 155);
+    const sprite = new Sprite(ctx);
 
     function smooth(ctx, enabled) {
         ctx.imageSmoothingEnabled = enabled;
@@ -339,7 +352,9 @@
         window.requestAnimationFrame(anim);
         room.render(ctx);
         hero.anim(room);
-        hero.collider.render(ctx);
+        sprite.circle(hero.pos, hero.size)
+            .fill("grey")
+            .stroke("black");
         cam.render(ctx, hero.pos);
     }
 
