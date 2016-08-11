@@ -360,24 +360,24 @@
             return this;
         }
 
-        circle(radius) {
+        ellipse(rad1, rad2, angle) {
             const ctx = this.ctx;
             ctx.beginPath();
-            ctx.arc(0, 0, radius, 0, 2 * Math.PI, false);
+            this.ctx.ellipse(0, 0, rad1, rad2 || rad1, angle || 0, 0, 2 * Math.PI);
             ctx.closePath();
             return this;
         }
 
-        ngon(num, rad, rad2) {
+        ngon(num, rad1, rad2) {
             const ctx = this.ctx;
             ctx.beginPath();
             for (let i = 0; i < num; i++) {
                 let a = Math.PI * 2 / num;
                 if (i > 0) {
                     let b = a * i;
-                    ctx.lineTo(Math.sin(b) * rad, Math.cos(b) * rad);
+                    ctx.lineTo(Math.sin(b) * rad1, Math.cos(b) * rad1);
                 } else {
-                    ctx.moveTo(0, rad);
+                    ctx.moveTo(0, rad1);
                 }
                 if (rad2) {
                     let c = a * (i + 0.5);
@@ -399,18 +399,20 @@
         render() {
             const renderer = this.renderer;
             renderer.begin();
-            for (let a=0; a<3; a++) {
-                renderer.begin().to(a*24, 0);
-                this.cog(a * 10);
-                renderer.end();
-            }
-            renderer.to(0, 24);
             for (let y=1; y>-2; y--) {
                 for (let x=-1; x<2; x++) {
                     renderer.begin().to(x*24+24, y*24+24);
                     this.teo(x, y);
                     renderer.end();
                 }
+            }
+            renderer.to(0, 72);
+            for (let a=0; a<3; a++) {
+                renderer.begin().to(a * 24, 0);
+                this.cog(a * 10);
+                renderer.to(a * 24, 24).scale(2);
+                this.cog(a * 10);
+                renderer.end();
             }
             renderer.end();
         }
@@ -423,7 +425,7 @@
                 .ngon(12, 10.5, 8)
                 .fill("grey")
                 .stroke("black")
-                .circle(2.3)
+                .ellipse(2.3)
                 .fill("black")
                 .end();
         }
@@ -432,15 +434,15 @@
             this.renderer
                 .begin()
                 .to(12, 12)
-                .circle(10.5)
+                .ellipse(10.5)
                 .fill("grey")
                 .stroke("black")
                 .begin()
                 .to(x, y-3)
-                .circle(5)
+                .ellipse(5)
                 .fill("white")
                 .to(x, y)
-                .circle(2.3)
+                .ellipse(2.3)
                 .fill("black")
                 .end()
                 .to(-3-x, 5+y)
@@ -471,14 +473,14 @@
         renderer
             .begin()
             .to(hero.pos, hero.pos)
-            .circle(10.5)
+            .ellipse(10.5)
             .fill("grey")
             .stroke("black")
             .begin()
             .to(0, -3)
-            .circle(5)
+            .ellipse(5)
             .fill("white")
-            .circle(2.3)
+            .ellipse(2.3)
             .fill("black")
             .end()
             .to(-3, 5)
@@ -508,7 +510,7 @@
         smooth(cam.ctx, false);
         smooth(ctx, false);
         sprite.render(-1, 0);
-        anim();
+        //anim();
     };
 
 })();
