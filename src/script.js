@@ -1,6 +1,6 @@
 "use strict";
 
-(function () {
+onload = function () {
 
 
     /**
@@ -121,6 +121,12 @@
             return this;
         }
 
+        round() {
+            this.x = Math.round(this.x);
+            this.y = Math.round(this.y);
+            return this;
+        }
+
         bit() {
             this.x = this.x > 0 ? 1 : this.x < 0 ? -1 : 0;
             this.y = this.y > 0 ? 1 : this.y < 0 ? -1 : 0;
@@ -145,7 +151,7 @@
             if (!this.begin.eq(this.end)) {
                 param = (a.x * b.x + a.y * b.y) / (b.x * b.x + b.y * b.y);
             }
-            if (param <= 0 || param >= 1) {
+            if (param < 0 || param > 1) {
                 return false;
             }
             return b.clone().multiply(param).add(this.begin);
@@ -193,40 +199,23 @@
             this.lines = lines;
         }
 
-        render(ctx) {
+        render(renderer) {
             if (this.img) {
-                ctx.drawImage(this.img, 0, 0);
+                renderer.img(this.img);
             } else {
-                this.renderBack(ctx);
-                this.renderWalls(ctx);
-                this.img = new Image();
-                this.img.src = ctx.canvas.toDataURL();
+                let w = renderer.ctx.canvas.width;
+                let h = renderer.ctx.canvas.height;
+                this.img = renderer
+                    .begin()
+                    .to(0, 0)
+                    .rect(w, h)
+                    .fill("#666")
+                    .end()
+                    .path(this.dots)
+                    .fill("#fff")
+                    .stroke()
+                    .merge();
             }
-        }
-
-        renderBack(ctx) {
-            let w = ctx.canvas.width;
-            let h = ctx.canvas.height;
-            let x = w / 2;
-            let y = h / 2;
-            const color = ctx.createRadialGradient(x, y, 0, x, y, y);
-            color.addColorStop(0, "#960");
-            color.addColorStop(1, "#210");
-            ctx.fillStyle = color;
-            ctx.fillRect(0, 0, w, h);
-        }
-
-        renderWalls(ctx) {
-            let dot = this.dots[0];
-            ctx.beginPath();
-            ctx.fillStyle = "white";
-            ctx.moveTo(dot.x, dot.y);
-            for (let i = 1; i < this.dots.length; i++) {
-                dot = this.dots[i];
-                ctx.lineTo(dot.x, dot.y);
-            };
-            ctx.closePath();
-            ctx.fill();
         }
 
     }
@@ -253,6 +242,7 @@
                 .add(24);
             renderer.begin()
                 .to(this.pos)
+                .to(-12, -12)
                 .img(this.img, vec.x, vec.y, 24, 24)
                 .end();
         }
@@ -311,6 +301,7 @@
     class Camera {
 
         constructor(ctx, size) {
+            this.pos = new Vec();
             this.ctx = ctx;
             this.size = size;
             this.resize();
@@ -320,17 +311,20 @@
             const canvas = this.ctx.canvas;
             canvas.width = canvas.clientWidth;
             canvas.height = canvas.clientHeight;
-            this.aspect = canvas.width / canvas.height;
-            this.scale = this.aspect > 1 ? canvas.height / this.size : canvas.width / this.size;
+            this.scale = canvas.width / canvas.height > 1
+                ? canvas.height / this.size 
+                : canvas.width / this.size;
         }
 
-        render(ctx, pos) {
+        render(ctx) {
             const canvas = this.ctx.canvas;
-            let s = this.scale;
-            let w = Math.ceil(canvas.width / s);
-            let h = Math.ceil(canvas.height / s);
+            let s = this.scale,
+                w = Math.ceil(canvas.width / s),
+                h = Math.ceil(canvas.height / s),
+                x = Math.round(this.pos.x - w / 2),
+                y = Math.round(this.pos.y - h / 2);
             this.ctx.fillRect(0, 0, canvas.width, canvas.height);
-            this.ctx.drawImage(ctx.canvas, pos.x - w / 2, pos.y - h / 2, w, h, 0, 0, w * s, h * s);
+            this.ctx.drawImage(ctx.canvas, x, y, w, h, 0, 0, w * s, h * s);
         }
 
     }
@@ -377,9 +371,10 @@
             return this;
         }
 
-        stroke(color) {
+        stroke(color, size) {
             const ctx = this.ctx;
-            ctx.strokeStyle = color;
+            ctx.lineWidth = size || 1;
+            ctx.strokeStyle = color || "#000";
             ctx.stroke();
             return this;
         }
@@ -417,6 +412,19 @@
             return this;
         }
 
+        path(dots) {
+            const ctx = this.ctx;
+            let dot = dots[0];
+            ctx.beginPath();
+            ctx.moveTo(dot.x, dot.y);
+            for (let i = 1; i < dots.length; i++) {
+                dot = dots[i];
+                ctx.lineTo(dot.x, dot.y);
+            };
+            ctx.closePath();
+            return this;
+        }
+
         merge() {
             const img = new Image();
             img.src = this.ctx.canvas.toDataURL();
@@ -424,7 +432,11 @@
         }
 
         img(img, x, y, w, h) {
-            this.ctx.drawImage(img, x, y, w, h, -(w / 2), -(h / 2), w, h);
+            x = x || 0;
+            y = y || 0;
+            w = w || img.width;
+            h = h || img.height;
+            this.ctx.drawImage(img, x, y, w, h, 0, 0, w, h);
             return this;
         }
 
@@ -464,7 +476,7 @@
                 .rotate(a)
                 .ngon(12, 10.5, 8)
                 .fill("grey")
-                .stroke("black")
+                .stroke()
                 .ellipse(2.3)
                 .fill("black")
                 .end();
@@ -476,13 +488,13 @@
                 .to(12, 12)
                 .ellipse(10.5)
                 .fill("grey")
-                .stroke("black")
+                .stroke()
                 .begin()
                 .to(x, y-3)
                 .ellipse(5)
                 .fill("white")
                 .to(x, y)
-                .ellipse(2.3)
+                .ellipse(2)
                 .fill("black")
                 .end()
                 .to(-3-x, 5+y)
@@ -508,32 +520,31 @@
 
     function anim() {
         window.requestAnimationFrame(anim);
-        room.render(ctx);
+        room.render(renderer);
         hero.anim(room);
         hero.render(renderer);
-        cam.render(ctx, hero.pos);
+        cam.pos = hero.pos;
+        cam.render(ctx);
     }
 
-    window.onload = function (e) {
-        on(document, "touchstart", function () {
-            e.preventDefault();
+    on(document, "touchstart", function (e) {
+        e.preventDefault();
+        hero.jump();
+    });
+    on(document, "mousedown", function (e) {
+        e.preventDefault();
+        hero.jump();
+    });
+    on(document, "keydown", function (e) {
+        if (e.keyCode == 32) {
             hero.jump();
-        });
-        on(document, "mousedown", function () {
-            e.preventDefault();
-            hero.jump();
-        });
-        on(document, "keydown", function (e) {
-            if (e.keyCode == 32) {
-                hero.jump();
-            }
-        });
-        on(window, "resize", function () {
-            cam.resize();
-        });
-        //smooth(cam.ctx, false);
-        //smooth(ctx, false);
-        anim();
-    };
+        }
+    });
+    on(window, "resize", function () {
+        cam.resize();
+    });
+    //smooth(cam.ctx, false);
+    smooth(ctx, false);
+    anim();
 
-})();
+};
