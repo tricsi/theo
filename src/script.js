@@ -302,13 +302,14 @@ onload = function () {
 
         constructor(ctx, size) {
             this.pos = new Vec();
-            this.ctx = ctx;
             this.size = size;
+            this.scale = 1;
+            this.renderer = new Renderer(ctx);
             this.resize();
         }
 
         resize() {
-            const canvas = this.ctx.canvas;
+            const canvas = this.renderer.ctx.canvas;
             canvas.width = canvas.clientWidth;
             canvas.height = canvas.clientHeight;
             this.scale = canvas.width / canvas.height > 1
@@ -317,14 +318,17 @@ onload = function () {
         }
 
         render(ctx) {
-            const canvas = this.ctx.canvas;
-            let s = this.scale,
-                w = Math.ceil(canvas.width / s),
-                h = Math.ceil(canvas.height / s),
-                x = Math.round(this.pos.x - w / 2),
-                y = Math.round(this.pos.y - h / 2);
-            this.ctx.fillRect(0, 0, canvas.width, canvas.height);
-            this.ctx.drawImage(ctx.canvas, x, y, w, h, 0, 0, w * s, h * s);
+            const canvas = this.renderer.ctx.canvas;
+            let w = canvas.width,
+                h = canvas.height;
+            this.renderer
+                .begin()
+                .clear(w, h)
+                .to(w / 2, h / 2)
+                .scale(this.scale)
+                .to(-this.pos.x, -this.pos.y)
+                .img(ctx.canvas)
+                .end();
         }
 
     }
@@ -376,6 +380,12 @@ onload = function () {
             ctx.lineWidth = size || 1;
             ctx.strokeStyle = color || "#000";
             ctx.stroke();
+            return this;
+        }
+
+        clear(width, height) {
+            const canvas = this.ctx.canvas;
+            this.ctx.clearRect(0, 0, width || canvas.width, height || canvas.height);
             return this;
         }
 
@@ -505,7 +515,7 @@ onload = function () {
     }
 
     const ctx = $("#game").getContext("2d");
-    const cam = new Camera($("#cam").getContext("2d"), 400);
+    const cam = new Camera($("#cam").getContext("2d"), 320);
     const room = new Room([1, 32, 25, 29, 4, 4, 29, 7, 7, 10, 29, 13, 7, 22, 26, 19, 10, 16, 29, 32, 32, 1, 1], 24);
     const renderer = new Renderer(ctx);
     const sprite = new Sprite(renderer).render();
@@ -543,7 +553,6 @@ onload = function () {
     on(window, "resize", function () {
         cam.resize();
     });
-    //smooth(cam.ctx, false);
     smooth(ctx, false);
     anim();
 

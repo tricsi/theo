@@ -3,6 +3,7 @@
 let gulp = require("gulp"),
     zip = require("gulp-zip"),
     sass = require("gulp-sass"),
+    size = require("gulp-size"),
     server = require("gulp-express"),
     minifier = require("gulp-uglify/minifier"),
     uglifyjs = require("uglify-js-harmony"),
@@ -45,6 +46,7 @@ gulp.task("uglify", ["clean"], function (cb) {
 gulp.task("zip", ["clean", "sass", "uglify", "copy"], function () {
     return gulp.src(["dist/*.html", "dist/*.js", "dist/*.css"])
         .pipe(zip("dist.zip"))
+        .pipe(size({title: "Build", pretty: false}))
         .pipe(gulp.dest("."));
 });
 
