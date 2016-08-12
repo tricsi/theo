@@ -70,15 +70,25 @@
             return this;
         }
 
-        add(vec) {
-            this.x += vec.x;
-            this.y += vec.y;
+        add(value) {
+            if (value instanceof Vec) {
+                this.x += value.x;
+                this.y += value.y;
+            } else {
+                this.x += value;
+                this.y += value;
+            }
             return this;
         }
 
-        sub(vec) {
-            this.x -= vec.x;
-            this.y -= vec.y;
+        sub(value) {
+            if (value instanceof Vec) {
+                this.x -= value.x;
+                this.y -= value.y;
+            } else {
+                this.x -= value;
+                this.y -= value;
+            }
             return this;
         }
 
@@ -108,6 +118,12 @@
         zero() {
             this.x = 0;
             this.y = 0;
+            return this;
+        }
+
+        bit() {
+            this.x = this.x > 0 ? 1 : this.x < 0 ? -1 : 0;
+            this.y = this.y > 0 ? 1 : this.y < 0 ? -1 : 0;
             return this;
         }
 
@@ -217,8 +233,9 @@
 
     class Hero {
 
-        constructor(x, y) {
+        constructor(x, y, img) {
             this.pos = new Vec(x, y);
+            this.img = img;
             this.size = 11;
             this.minSpeed = new Vec(0, 0);
             this.maxSpeed = new Vec(3, 5);
@@ -226,6 +243,18 @@
             this.velocity = new Vec(.1, .15);
             this.collide = new Vec();
             this.speed = this.minSpeed.clone();
+        }
+
+        render(renderer) {
+            const vec = hero.speed
+                .clone()
+                .bit()
+                .multiply(24)
+                .add(24);
+            renderer.begin()
+                .to(this.pos)
+                .img(this.img, vec.x, vec.y, 24, 24)
+                .end();
         }
 
         anim(room) {
@@ -388,6 +417,17 @@
             return this;
         }
 
+        merge() {
+            const img = new Image();
+            img.src = this.ctx.canvas.toDataURL();
+            return img;
+        }
+
+        img(img, x, y, w, h) {
+            this.ctx.drawImage(img, x, y, w, h, -(w / 2), -(h / 2), w, h);
+            return this;
+        }
+
     }
 
     class Sprite {
@@ -414,7 +454,7 @@
                 this.cog(a * 10);
                 renderer.end();
             }
-            renderer.end();
+            return renderer.end().merge();
         }
 
         cog(a) {
@@ -453,11 +493,11 @@
     }
 
     const ctx = $("#game").getContext("2d");
-    const cam = new Camera($("#cam").getContext("2d"), 300);
+    const cam = new Camera($("#cam").getContext("2d"), 400);
     const room = new Room([1, 32, 25, 29, 4, 4, 29, 7, 7, 10, 29, 13, 7, 22, 26, 19, 10, 16, 29, 32, 32, 1, 1], 24);
-    const hero = new Hero(250, 48);
     const renderer = new Renderer(ctx);
-    const sprite = new Sprite(renderer);
+    const sprite = new Sprite(renderer).render();
+    const hero = new Hero(250, 48, sprite);
 
     function smooth(ctx, enabled) {
         ctx.imageSmoothingEnabled = enabled;
@@ -470,25 +510,7 @@
         window.requestAnimationFrame(anim);
         room.render(ctx);
         hero.anim(room);
-        const vec = hero.speed.clone().norm();
-        renderer
-            .begin()
-            .to(hero.pos, hero.pos)
-            .ellipse(10.5)
-            .fill("grey")
-            .stroke("black")
-            .begin()
-            .to(vec.x, vec.y - 3)
-            .ellipse(5)
-            .fill("white")
-            .to(vec.x, vec.y)
-            .ellipse(2.1)
-            .fill("black")
-            .end()
-            .to(-3 - vec.x, vec.y + 5)
-            .rect(6, 1)
-            .fill("black")
-            .end();
+        hero.render(renderer);
         cam.render(ctx, hero.pos);
     }
 
@@ -511,7 +533,6 @@
         });
         //smooth(cam.ctx, false);
         //smooth(ctx, false);
-        sprite.render(-1, 0);
         anim();
     };
 
