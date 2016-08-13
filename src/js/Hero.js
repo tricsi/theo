@@ -15,8 +15,14 @@ class Hero {
     render(renderer) {
         const vec = hero.speed
             .clone()
-            .bit()
-            .multiply(24)
+            .bit();
+        if (this.collide.x) {
+            vec.y = 0;
+        }
+        if (this.collide.y) {
+            vec.x = 0;
+        }
+        vec.multiply(24)
             .add(24);
         renderer.begin()
             .to(this.pos)
