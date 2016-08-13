@@ -1,5 +1,5 @@
 const ctx = $("#game").getContext("2d");
-const cam = new Camera($("#cam").getContext("2d"), 300);
+const cam = new Camera(300);
 const renderer = new Renderer(ctx);
 const sprite = new Sprite(renderer);
 const scene = new Scene(

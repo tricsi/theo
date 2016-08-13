@@ -1,6 +1,5 @@
 body, 
-html, 
-#cam { 
+html { 
     padding: 0; 
     margin: 0; 
     width: 100%; 
@@ -9,6 +8,8 @@ html,
     background: #000;
 }
 
-#game { 
-    display: none;
+#game {
+    position: absolute;
+    left: 50%;
+    top: 50%;
 }
