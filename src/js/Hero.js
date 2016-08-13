@@ -20,6 +20,7 @@ class Hero {
     }
 
     render(renderer) {
+        const pos = this.pos.clone().sub(12);
         const vec = this.speed.clone().bit();
         if (this.collide.x) {
             vec.y = 0;
@@ -28,7 +29,7 @@ class Hero {
             vec.x = 0;
         }
         vec.multiply(24).add(24);
-        renderer.sprite(vec.x, vec.y, 24, 24, this.pos.x-12, this.pos.y-12);
+        renderer.sprite(vec.x, vec.y, 24, 24, pos.x, pos.y);
     }
 
     anim(room) {
