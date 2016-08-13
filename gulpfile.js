@@ -33,9 +33,6 @@ gulp.task("sass", ["clean"], function () {
 });
 
 gulp.task("uglify", ["clean"], function (cb) {
-    var options = {
-        mangle: true
-    };
     pump([
         gulp.src(["src/js/*.js", "src/script.js"]),
         concat("script.js"),
@@ -43,7 +40,7 @@ gulp.task("uglify", ["clean"], function (cb) {
             return "onload = function () {\n" + contents + "};";
         }),
         sourcemaps.init(),
-        minifier(options, uglifyjs),
+        minifier({mangle: true}, uglifyjs),
         sourcemaps.write("."),
         gulp.dest("dist")
     ], cb);
@@ -62,7 +59,7 @@ gulp.task("server", ["default"], function () {
 });
 
 gulp.task("watch", ["server"], function () {
-    gulp.watch("src/*.*", ["server"]);
+    gulp.watch("src/**/*.*", ["server"]);
 });
 
 gulp.task("default", ["clean", "sass", "uglify", "copy", "zip"]);

@@ -54,8 +54,15 @@ class Renderer {
         return this;
     }
 
-    rect(width, height) {
+    rect(width, height, color) {
+        if (color) {
+            ctx.fillStyle = color;
+            this.ctx.fillRect(0, 0, width, height);
+            return this;
+        }
+        ctx.beginPath();
         this.ctx.rect(0, 0, width, height);
+        ctx.closePath();
         return this;
     }
 
