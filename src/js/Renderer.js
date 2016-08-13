@@ -2,6 +2,7 @@ class Renderer {
 
     constructor(ctx) {
         this.ctx = ctx;
+        this.rgb = ["#000", "#fff", "#666", "#999", "#ccc"];
     }
 
     begin() {
@@ -35,7 +36,7 @@ class Renderer {
 
     fill(color) {
         const ctx = this.ctx;
-        ctx.fillStyle = color;
+        ctx.fillStyle = this.rgb[color || 0];
         ctx.fill();
         return this;
     }
@@ -43,7 +44,7 @@ class Renderer {
     stroke(color, size) {
         const ctx = this.ctx;
         ctx.lineWidth = size || 1;
-        ctx.strokeStyle = color || "#000";
+        ctx.strokeStyle = this.rgb[color || 0];
         ctx.stroke();
         return this;
     }
@@ -55,8 +56,8 @@ class Renderer {
     }
 
     rect(width, height, color) {
-        if (color) {
-            ctx.fillStyle = color;
+        if (color !== undefined) {
+            ctx.fillStyle = this.rgb[color || 0];
             this.ctx.fillRect(0, 0, width, height);
             return this;
         }
@@ -107,22 +108,22 @@ class Renderer {
         return this;
     }
 
-    merge(sprite) {
+    merge(store) {
         let img = new Image();
         img.src = this.ctx.canvas.toDataURL();
-        if (sprite) {
-            this.sprite = img;
+        if (store) {
+            this.store = img;
         }
         return img;
     }
 
-    img(x, y, w, h, img) {
-        img = img || this.sprite;
-        x = Math.round(x || 0);
-        y = Math.round(y || 0);
-        w = Math.round(w || img.width);
-        h = Math.round(h || img.height);
-        this.ctx.drawImage(img, x, y, w, h, 0, 0, w, h);
+    img(img, x, y, w, h) {
+        this.ctx.drawImage(img, x || 0, y || 0, w || img.width, h || img.height);
+        return this;
+    }
+
+    sprite(sx, sy, sw, sh, dx, dy, dw, dh) {
+        this.ctx.drawImage(this.store, sx, sy, sw, sh, dx || 0, dy || 0, dw || sw, dh || sh);
         return this;
     }
 

@@ -27,7 +27,7 @@ class Camera {
             .to(w / 2, h / 2)
             .scale(this.scale)
             .to(-this.pos.x, -this.pos.y)
-            .img(0, 0, 0, 0, ctx.canvas)
+            .img(ctx.canvas)
             .end();
     }
 

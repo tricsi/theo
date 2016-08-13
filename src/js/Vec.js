@@ -84,12 +84,6 @@ class Vec {
         return this;
     }
 
-    round() {
-        this.x = Math.round(this.x);
-        this.y = Math.round(this.y);
-        return this;
-    }
-
     bit() {
         this.x = this.x > 0 ? 1 : this.x < 0 ? -1 : 0;
         this.y = this.y > 0 ? 1 : this.y < 0 ? -1 : 0;

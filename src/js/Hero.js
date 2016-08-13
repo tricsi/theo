@@ -20,22 +20,15 @@ class Hero {
     }
 
     render(renderer) {
-        const vec = this.speed
-            .clone()
-            .bit();
+        const vec = this.speed.clone().bit();
         if (this.collide.x) {
             vec.y = 0;
         }
         if (this.collide.y) {
             vec.x = 0;
         }
-        vec.multiply(24)
-            .add(24);
-        renderer.begin()
-            .to(this.pos)
-            .to(-12, -12)
-            .img(vec.x, vec.y, 24, 24)
-            .end();
+        vec.multiply(24).add(24);
+        renderer.sprite(vec.x, vec.y, 24, 24, this.pos.x-12, this.pos.y-12);
     }
 
     anim(room) {

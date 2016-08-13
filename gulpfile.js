@@ -37,10 +37,11 @@ gulp.task("uglify", ["clean"], function (cb) {
         gulp.src(["src/js/*.js", "src/script.js"]),
         concat("script.js"),
         insert.transform(function(contents, file) {
-            return "onload = function () {\n" + contents + "};";
+            return 'onload = function () {\n' + contents + '};';
         }),
         sourcemaps.init(),
         minifier({mangle: true}, uglifyjs),
+        insert.prepend('"use strict";\n'),
         sourcemaps.write("."),
         gulp.dest("dist")
     ], cb);

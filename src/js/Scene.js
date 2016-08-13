@@ -5,16 +5,12 @@ class Scene {
         this.room = room;
         this.hero = hero;
         this.run = false;
-        this.enter = new Vec(-12, -21).add(hero.pos);
+        this.enter = new Vec(-6, -21).add(hero.pos);
     }
 
     render(renderer) {
         this.room.render(renderer);
-        renderer
-            .begin()
-            .to(this.enter)
-            .img(24, 96, 24, 32)
-            .end();
+        renderer.sprite(24, 96, 24, 32, this.enter.x, this.enter.y);
         this.hero.render(renderer);
     }
 
