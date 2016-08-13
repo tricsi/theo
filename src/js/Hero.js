@@ -1,19 +1,26 @@
 class Hero {
 
-    constructor(x, y, img) {
-        this.pos = new Vec(x, y);
-        this.img = img;
+    constructor(pos) {
+        this.pos = pos;
         this.size = 11;
-        this.minSpeed = new Vec(0, 0);
+        this.minSpeed = new Vec();
         this.maxSpeed = new Vec(3, 5);
         this.jumpSpeed = new Vec(3, -5);
-        this.velocity = new Vec(.1, .15);
         this.collide = new Vec();
-        this.speed = this.minSpeed.clone();
+        this.stop();
+    }
+
+    stop() {
+        this.speed = new Vec();
+        this.velocity = new Vec();
+    }
+
+    start() {
+        this.velocity = new Vec(.1, .15);
     }
 
     render(renderer) {
-        const vec = hero.speed
+        const vec = this.speed
             .clone()
             .bit();
         if (this.collide.x) {
@@ -27,7 +34,7 @@ class Hero {
         renderer.begin()
             .to(this.pos)
             .to(-12, -12)
-            .img(this.img, vec.x, vec.y, 24, 24)
+            .img(vec.x, vec.y, 24, 24)
             .end();
     }
 

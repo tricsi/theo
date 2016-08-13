@@ -32,7 +32,7 @@ class Room {
 
     render(renderer) {
         if (this.img) {
-            renderer.img(this.img);
+            renderer.img(0, 0, 0, 0, this.img);
         } else {
             let w = renderer.ctx.canvas.width;
             let h = renderer.ctx.canvas.height;
@@ -44,7 +44,6 @@ class Room {
                 .end()
                 .path(this.dots)
                 .fill("#fff")
-                .stroke()
                 .merge();
         }
     }

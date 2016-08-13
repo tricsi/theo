@@ -22,7 +22,7 @@ class Sprite {
         }
         renderer.to(0, 24);
         this.door();
-        return renderer.end().merge();
+        renderer.end().merge(true);
     }
 
     door() {

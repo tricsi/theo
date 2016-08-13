@@ -107,17 +107,21 @@ class Renderer {
         return this;
     }
 
-    merge() {
-        const img = new Image();
+    merge(sprite) {
+        let img = new Image();
         img.src = this.ctx.canvas.toDataURL();
+        if (sprite) {
+            this.sprite = img;
+        }
         return img;
     }
 
-    img(img, x, y, w, h) {
-        x = x || 0;
-        y = y || 0;
-        w = w || img.width;
-        h = h || img.height;
+    img(x, y, w, h, img) {
+        img = img || this.sprite;
+        x = Math.round(x || 0);
+        y = Math.round(y || 0);
+        w = Math.round(w || img.width);
+        h = Math.round(h || img.height);
         this.ctx.drawImage(img, x, y, w, h, 0, 0, w, h);
         return this;
     }

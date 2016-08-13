@@ -4,15 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "gulp watch"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://tricsi@bitbucket.org/tricsi/tower.git"
-  },
-  "author": "",
+  "author": "@CsabaCsecskedi",
   "license": "MIT",
-  "homepage": "https://bitbucket.org/tricsi/tower#readme",
   "dependencies": {
     "express": "^4.13.4",
     "socket.io": "^1.4.6"
