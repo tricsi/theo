@@ -4,6 +4,8 @@ let gulp = require("gulp"),
     zip = require("gulp-zip"),
     sass = require("gulp-sass"),
     size = require("gulp-size"),
+    concat = require("gulp-concat"),
+    insert = require("gulp-insert"),
     server = require("gulp-express"),
     minifier = require("gulp-uglify/minifier"),
     uglifyjs = require("uglify-js-harmony"),
@@ -35,7 +37,11 @@ gulp.task("uglify", ["clean"], function (cb) {
         mangle: true
     };
     pump([
-        gulp.src("src/*.js"),
+        gulp.src(["src/js/*.js", "src/script.js"]),
+        concat("script.js"),
+        insert.transform(function(contents, file) {
+            return "onload = function () {\n" + contents + "};";
+        }),
         sourcemaps.init(),
         minifier(options, uglifyjs),
         sourcemaps.write("."),
