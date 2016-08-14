@@ -1,4 +1,4 @@
-class Renderer {
+class Draw {
 
     constructor(ctx) {
         this.ctx = ctx;

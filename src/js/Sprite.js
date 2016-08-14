@@ -1,32 +1,32 @@
 class Sprite {
 
-    constructor(renderer) {
-        this.renderer = renderer;
+    constructor(draw) {
+        this.draw = draw;
     }
 
     render() {
-        const renderer = this.renderer;
-        renderer.begin();
+        const draw = this.draw;
+        draw.begin();
         for (let y=1; y>-2; y--) {
             for (let x=-1; x<2; x++) {
-                renderer.begin().to(x*24+24, y*24+24);
+                draw.begin().to(x*24+24, y*24+24);
                 this.teo(x, y);
-                renderer.end();
+                draw.end();
             }
         }
-        renderer.to(0, 72);
+        draw.to(0, 72);
         for (let a=0; a<3; a++) {
-            renderer.begin().to(a * 24, 0);
+            draw.begin().to(a * 24, 0);
             this.cog(a * 10);
-            renderer.end();
+            draw.end();
         }
-        renderer.to(0, 24);
+        draw.to(0, 24);
         this.door();
-        renderer.end().merge(true);
+        draw.end().merge(true);
     }
 
     door() {
-        renderer.begin()
+        draw.begin()
             .rect(24, 32, 0)
             .to(1, 1)
             .rect(22, 30, 4)
@@ -67,7 +67,7 @@ class Sprite {
     }
 
     cog(a) {
-        this.renderer
+        this.draw
             .begin()
             .to(12, 12)
             .rotate(a)
@@ -80,7 +80,7 @@ class Sprite {
     }
 
     teo(x, y) {
-        this.renderer
+        this.draw
             .begin()
             .to(12, 12)
             .ellipse(11.3)

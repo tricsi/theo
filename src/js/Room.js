@@ -30,13 +30,13 @@ class Room {
         this.lines = lines;
     }
 
-    render(renderer) {
+    render(draw) {
         if (this.img) {
-            renderer.img(this.img);
+            draw.img(this.img);
         } else {
-            let w = renderer.ctx.canvas.width;
-            let h = renderer.ctx.canvas.height;
-            this.img = renderer
+            let w = draw.ctx.canvas.width;
+            let h = draw.ctx.canvas.height;
+            this.img = draw
                 .begin()
                 .rect(w, h, 2)
                 .end()

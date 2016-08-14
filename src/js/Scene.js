@@ -9,15 +9,15 @@ class Scene {
         this.run = false;
     }
 
-    render(renderer) {
-        this.room.render(renderer);
-        this.enter.render(renderer);
-        this.exit.render(renderer);
-        this.hero.render(renderer);
+    render(draw) {
+        this.room.render(draw);
+        this.enter.render(draw);
+        this.exit.render(draw);
+        this.hero.render(draw);
     }
 
-    anim() {
-        this.hero.anim(this.room);
+    update() {
+        this.hero.update(this.room);
     }
 
     tap() {

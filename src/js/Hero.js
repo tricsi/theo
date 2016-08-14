@@ -19,7 +19,7 @@ class Hero {
         this.velocity = new Vec(.1, .15);
     }
 
-    render(renderer) {
+    render(draw) {
         const pos = this.pos.clone().sub(12);
         const vec = this.speed.clone().bit();
         if (this.collide.x) {
@@ -29,10 +29,10 @@ class Hero {
             vec.x = 0;
         }
         vec.multiply(24).add(24);
-        renderer.sprite(vec.x, vec.y, 24, 24, pos.x, pos.y);
+        draw.sprite(vec.x, vec.y, 24, 24, pos.x, pos.y);
     }
 
-    anim(room) {
+    update(room) {
         const collide = new Vec();
         const size = this.size;
         const speed = this.speed
