@@ -33,22 +33,17 @@ class Hero {
     }
 
     update(room) {
-        const collide = new Vec();
-        const size = this.size;
-        const speed = this.speed
-            .add(this.velocity)
-            .max(this.maxSpeed)
-            .clone();
-        const pos = this.pos.add(speed);
-        room.lines.forEach(function (line) {
-            const dot = line.project(pos);
-            if (!dot) {
-                return;
-            }
-            const vec = pos.clone().sub(dot);
-            const distance = vec.mag();
-            if (distance <= size) {
-                pos.add(vec.div(distance).multiply(size - distance));
+        let size = this.size,
+            collide = new Vec();
+        this.speed.add(this.velocity).max(this.maxSpeed),
+        this.pos.add(this.speed);
+        for (let i = 0; i < room.lines.length; i++) {
+            let line = room.lines[i],
+                dot = line.project(this.pos),
+                vec = this.pos.clone().sub(dot),
+                distance = vec.mag();
+            if (distance < size) {
+                this.pos.add(vec.clone().div(distance).multiply(size - distance));
                 if (line.vertical()) {
                     collide.y = 1;
                 }
@@ -56,7 +51,7 @@ class Hero {
                     collide.x = 1;
                 }
             }
-        });
+        }
         if (collide.x || (collide.y && !this.collide.y)) {
             this.speed.y = this.minSpeed.y;
         }
@@ -65,9 +60,7 @@ class Hero {
 
     turn() {
         this.velocity.x = -this.velocity.x;
-        this.speed.x = this.velocity.x < 0
-            ? -this.jumpSpeed.x
-            : this.jumpSpeed.x;
+        this.speed.x = this.velocity.x < 0 ? -this.jumpSpeed.x : this.jumpSpeed.x;
 
     }
 
