@@ -38,9 +38,7 @@ class Room {
             let h = renderer.ctx.canvas.height;
             this.img = renderer
                 .begin()
-                .to(0, 0)
-                .rect(w, h)
-                .fill(2)
+                .rect(w, h, 2)
                 .end()
                 .path(this.dots)
                 .fill(1)

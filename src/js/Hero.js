@@ -2,7 +2,7 @@ class Hero {
 
     constructor(pos) {
         this.pos = pos;
-        this.size = 11;
+        this.size = 12;
         this.minSpeed = new Vec();
         this.maxSpeed = new Vec(3, 5);
         this.jumpSpeed = new Vec(3, -5);
@@ -47,7 +47,7 @@ class Hero {
             }
             const vec = pos.clone().sub(dot);
             const distance = vec.mag();
-            if (distance < size) {
+            if (distance <= size) {
                 pos.add(vec.div(distance).multiply(size - distance));
                 if (line.vertical()) {
                     collide.y = 1;

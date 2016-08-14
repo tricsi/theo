@@ -52,7 +52,7 @@ class Sprite {
             .rect(4, 6, 2)
             .end()
             .begin()
-            .to(-3, 0)
+            .to(-2, 0)
             .rect(6, 24, 0)
             .to(1, 1)
             .rect(4, 22, 2)
@@ -83,7 +83,7 @@ class Sprite {
         this.renderer
             .begin()
             .to(12, 12)
-            .ellipse(10.5)
+            .ellipse(11.3)
             .fill(3)
             .stroke()
             .begin()

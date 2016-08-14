@@ -17,8 +17,8 @@ class Camera {
     render(ctx) {
         const canvas = ctx.canvas;
         let s = this.scale,
-            x = this.pos.x,
-            y = this.pos.y;
+            x = Math.round(this.pos.x),
+            y = Math.round(this.pos.y);
         canvas.style.transformOrigin = `${x}px ${y}px`;
         canvas.style.transform = `translate(${-x}px, ${-y}px) scale(${s},${s})`;
     }

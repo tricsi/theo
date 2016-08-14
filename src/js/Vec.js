@@ -90,4 +90,10 @@ class Vec {
         return this;
     }
 
+    round() {
+        this.x = Math.round(this.x);
+        this.y = Math.round(this.y);
+        return this;
+    }
+
 }

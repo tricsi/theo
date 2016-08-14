@@ -123,7 +123,7 @@ class Renderer {
     }
 
     sprite(sx, sy, sw, sh, dx, dy, dw, dh) {
-        this.ctx.drawImage(this.store, sx, sy, sw, sh, dx || 0, dy || 0, dw || sw, dh || sh);
+        this.ctx.drawImage(this.store, Math.round(sx), Math.round(sy), sw, sh, Math.round(dx || 0), Math.round(dy || 0), dw || sw, dh || sh);
         return this;
     }
 

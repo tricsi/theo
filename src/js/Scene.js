@@ -1,16 +1,18 @@
 class Scene {
 
-    constructor(hero, room) {
+    constructor(hero, room, exit) {
         this.cam = cam;
         this.room = room;
         this.hero = hero;
+        this.exit = exit;
+        this.enter = new Door(hero.pos.clone(), false, true);
         this.run = false;
-        this.enter = new Vec(-6, -21).add(hero.pos);
     }
 
     render(renderer) {
         this.room.render(renderer);
-        renderer.sprite(24, 96, 24, 32, this.enter.x, this.enter.y);
+        this.enter.render(renderer);
+        this.exit.render(renderer);
         this.hero.render(renderer);
     }
 

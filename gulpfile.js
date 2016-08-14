@@ -14,7 +14,7 @@ let gulp = require("gulp"),
     del = require("del");
 
 gulp.task("clean", function () {
-    return del(["dist"]);
+    return del(["dist/*"]);
 });
 
 gulp.task("copy", ["clean"], function () {
@@ -37,11 +37,10 @@ gulp.task("uglify", ["clean"], function (cb) {
         gulp.src(["src/js/*.js", "src/script.js"]),
         concat("script.js"),
         insert.transform(function(contents, file) {
-            return 'onload = function () {\n' + contents + '};';
+            return '"use strict";\nonload = function () {\n' + contents + '};';
         }),
         sourcemaps.init(),
         minifier({mangle: true}, uglifyjs),
-        insert.prepend('"use strict";\n'),
         sourcemaps.write("."),
         gulp.dest("dist")
     ], cb);
