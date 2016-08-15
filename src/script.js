@@ -27,6 +27,7 @@ on(document, "mousedown", function (e) {
 });
 
 on(document, "keydown", function (e) {
+    e.preventDefault();
     if (e.keyCode == 32) {
         scene.tap();
     }
