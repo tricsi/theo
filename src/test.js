@@ -3,18 +3,23 @@ onload = function () {
     class Instrument {
 
         constructor(ctx, type, destination) {
-            let vol = ctx.createGain();
-            let osc = ctx.createOscillator();
             this.ctx = ctx;
-            this.osc = osc;
-            this.vol = vol;
+            this.type = type;
             this.dest = destination || ctx.destination;
+        }
+
+        init() {
+            let ctx = this.ctx,
+                vol = ctx.createGain(),
+                osc = ctx.createOscillator();
             vol.gain.value = 1;
             vol.connect(this.dest);
             osc.frequency.value = 0;
             osc.connect(vol);
-            osc.type = type;
+            osc.type = this.type;
             osc.start();
+            this.osc = osc;
+            this.vol = vol;
         }
 
         volForm(curve, time) {
@@ -24,6 +29,9 @@ onload = function () {
         }
 
         play(freq, length, startTime) {
+            if (!this.osc) {
+                this.init();
+            }
             let ctx = this.ctx,
                 osc = this.osc,
                 vol = this.vol,
@@ -31,9 +39,11 @@ onload = function () {
             if (startTime) {
                 start += startTime;
             }
+            vol.gain.cancelScheduledValues(start);
             if (this.volCurve && this.volTime) {
-                vol.gain.setValueCurveAtTime(this.volCurve, start, this.volTime);
+                vol.gain.setValueCurveAtTime(this.volCurve, start, length);
             }
+            osc.frequency.cancelScheduledValues(start);
             if (freq instanceof Array) {
                 osc.frequency.setValueCurveAtTime(new Float32Array(freq), start, length);
             } else {
@@ -41,6 +51,14 @@ onload = function () {
             }
             osc.frequency.setValueAtTime(0, start + length);
             return this;
+        }
+
+        stop() {
+            if (this.osc) {
+                this.osc.stop();
+                this.osc = null;
+                this.gain = null;
+            }
         }
 
         clone() {
@@ -59,6 +77,7 @@ onload = function () {
             this.insts = [instrument];
             this.notes = notes.split(",");
             this.tempo = tempo || 1;
+            this.playing = false;
             if (!Channel.keys) {
                 Channel.keys = {c:0, db:1, d:2, eb:3, e:4, f:5, gb:6, g:7, ab:8, a:9, bb:10, b:11};
                 Channel.freqs = [];
@@ -71,13 +90,17 @@ onload = function () {
 
         inst(num) {
             num = num || 0;
-            if (this.insts.length <= num) {
-                this.insts[num] = this.insts[0].clone();
+            while (this.insts.length <= num) {
+                this.insts.push(this.insts[0].clone());
             }
             return this.insts[num];
         }
 
         play(start) {
+            if (this.playing) {
+                return;
+            }
+            this.playing = true;
             start = start || 0;
             for (let i = 0; i < this.notes.length; i++) {
                 let note = this.notes[i];
@@ -95,6 +118,11 @@ onload = function () {
                     start += length;
                 }
             }
+        }
+
+        stop() {
+            this.insts.forEach((inst) => inst.stop());
+            this.playing = false;
         }
 
     }
@@ -120,9 +148,14 @@ onload = function () {
             this.channels.forEach((channel) => channel.play());
             return this;
         }
+
+        stop() {
+            this.channels.forEach((channel) => channel.stop());
+            return this;
+        }
     }
 
-    new Song(1.3).add(
+    const song = new Song(1.3).add(
         //sax
         "1,4," +
         "1,4," +
@@ -153,7 +186,7 @@ onload = function () {
         "2b4,4,16gb5,16g5,16gb5,16e5,4d5," +
         "1e5,4",
         "square",
-        [1, .7, .5],
+        [.9, .7],
         .2
     ).add(
         //piano
@@ -186,7 +219,7 @@ onload = function () {
         "8e2,4g3b3e4,8e2,4g3b3e4,4b3,4ab3a3d4," +
         "8e2,4g3b3e4,8e2,4g3b3e4,4b3,4ab3a3d4",
         "sine",
-        [1, .7, .5],
+        [.8, .5],
         .2
     ).add(
         //bass
@@ -219,8 +252,10 @@ onload = function () {
         "2e2,4e2,4b2,4b1," +
         "2e2,4e2,4b2,4b1",
         "triangle",
-        [1, .7, .5],
+        [.8, .5],
         .2
-    ).play();
+    );
 
+    document.getElementById("play").addEventListener("click", () => song.play(), false);
+    document.getElementById("stop").addEventListener("click", () => song.stop(), false);
 };
