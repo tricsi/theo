@@ -73,7 +73,7 @@ onload = function () {
 
     class Channel {
 
-        constructor(instrument, notes, tempo) {
+        constructor(notes, tempo, instrument) {
             this.insts = [instrument];
             this.notes = notes.split(",");
             this.tempo = tempo || 1;
@@ -129,10 +129,11 @@ onload = function () {
 
     class Song {
 
-        constructor(tempo, ctx) {
+        constructor(tempo, volume, ctx) {
             ctx = ctx || new AudioContext();
             let master = ctx.createGain();
             master.connect(ctx.destination);
+            master.gain.value = volume || .5;
             this.ctx = ctx;
             this.tempo = tempo;
             this.master = master;
@@ -143,7 +144,7 @@ onload = function () {
         add(notes, type, curve, time) {
             let gain = this.ctx.createGain(),
                 inst = new Instrument(this.ctx, type || "sine", gain),
-                channel = new Channel(inst, notes, this.tempo);
+                channel = new Channel(notes, this.tempo, inst);
             if (curve && time) {
                 inst.form(curve, time);
             }
