@@ -25,5 +25,32 @@
     "gulp-zip": "^3.2.0",
     "pump": "^1.0.1",
     "uglify-js-harmony": "^2.6.2"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+      "indent": [
+        "error",
+        4
+      ],
+      "linebreak-style": [
+        "error",
+        "windows"
+      ],
+      "quotes": [
+        "error",
+        "double"
+      ],
+      "semi": [
+        "error",
+        "always"
+      ],
+      "no-undef": "warn",
+      "no-unused-vars": "warn"
+    }
   }
 }
