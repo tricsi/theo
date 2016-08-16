@@ -31,19 +31,14 @@ class Room {
     }
 
     render(draw) {
-        if (this.img) {
-            draw.img(this.img);
-        } else {
-            let w = draw.ctx.canvas.width;
-            let h = draw.ctx.canvas.height;
-            this.img = draw
-                .begin()
-                .rect(w, h, 2)
-                .end()
-                .path(this.dots)
-                .fill(1)
-                .merge();
-        }
+        let w = draw.ctx.canvas.width;
+        let h = draw.ctx.canvas.height;
+        this.img = draw
+            .begin()
+            .rect(w, h, 2)
+            .path(this.dots)
+            .fill(1)
+            .end();
     }
 
 }

@@ -18,12 +18,12 @@ gulp.task("clean", function () {
 });
 
 gulp.task("copy", ["clean"], function () {
-    gulp.src("src/*.html")
+    gulp.src("src/index.html")
         .pipe(gulp.dest("dist"));
 });
 
 gulp.task("sass", ["clean"], function () {
-    return gulp.src("src/*.scss")
+    return gulp.src("src/style.scss")
         .pipe(sourcemaps.init())
         .pipe(sass({
             outputStyle: "compressed"
