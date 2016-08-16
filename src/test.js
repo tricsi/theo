@@ -22,7 +22,7 @@ onload = function () {
             this.vol = vol;
         }
 
-        volForm(curve, time) {
+        form(curve, time) {
             this.volCurve = new Float32Array(curve);
             this.volTime = time;
             return this;
@@ -64,7 +64,7 @@ onload = function () {
         clone() {
             let clone = new Instrument(this.ctx, this.osc.type, this.dest);
             if (this.volCurve && this.volTime) {
-                clone.volForm(this.volCurve, this.volTime);
+                clone.form(this.volCurve, this.volTime);
             }
             return clone;
         }
@@ -98,7 +98,7 @@ onload = function () {
 
         play(start) {
             if (this.playing) {
-                return;
+                this.stop();
             }
             this.playing = true;
             start = start || 0;
@@ -130,28 +130,35 @@ onload = function () {
     class Song {
 
         constructor(tempo, ctx) {
-            this.ctx = ctx || new AudioContext();
+            ctx = ctx || new AudioContext();
+            let master = ctx.createGain();
+            master.connect(ctx.destination);
+            this.ctx = ctx;
             this.tempo = tempo;
+            this.master = master;
+            this.mixer = [];
             this.channels = [];
         }
 
         add(notes, type, curve, time) {
-            let inst = new Instrument(this.ctx, type || "sine");
+            let gain = this.ctx.createGain(),
+                inst = new Instrument(this.ctx, type || "sine", gain),
+                channel = new Channel(inst, notes, this.tempo);
             if (curve && time) {
-                inst.volForm(curve, time);
-            } 
-            this.channels.push(new Channel(inst, notes, this.tempo));
+                inst.form(curve, time);
+            }
+            gain.connect(this.master);
+            this.mixer.push(gain);
+            this.channels.push(channel);
             return this;
         }
 
         play() {
             this.channels.forEach((channel) => channel.play());
-            return this;
         }
 
         stop() {
             this.channels.forEach((channel) => channel.stop());
-            return this;
         }
     }
 
@@ -186,7 +193,7 @@ onload = function () {
         "2b4,4,16gb5,16g5,16gb5,16e5,4d5," +
         "1e5,4",
         "square",
-        [.9, .7],
+        [.8, .5],
         .2
     ).add(
         //piano
@@ -256,6 +263,22 @@ onload = function () {
         .2
     );
 
-    document.getElementById("play").addEventListener("click", () => song.play(), false);
-    document.getElementById("stop").addEventListener("click", () => song.stop(), false);
+    document.getElementById("play").addEventListener("click", function() {
+        song.play();
+    }, false);
+    document.getElementById("stop").addEventListener("click", function() {
+        song.stop();
+    }, false);
+    document.getElementById("master").addEventListener("change", function() {
+        song.master.gain.value = parseInt(this.value) / 100;
+    }, false);
+    document.getElementById("mixer0").addEventListener("change", function() {
+        song.mixer[0].gain.value = parseInt(this.value) / 100;
+    }, false);
+    document.getElementById("mixer1").addEventListener("change", function() {
+        song.mixer[1].gain.value = parseInt(this.value) / 100;
+    }, false);
+    document.getElementById("mixer2").addEventListener("change", function() {
+        song.mixer[2].gain.value = parseInt(this.value) / 100;
+    }, false);
 };
