@@ -16,26 +16,27 @@ function update() {
     cam.render(ctx);
 }
 
-on(document, "touchstart", function (e) {
+on(document, "touchstart", (e) => {
     e.preventDefault();
     scene.tap();
 });
 
-on(document, "mousedown", function (e) {
+on(document, "mousedown", (e) => {
     e.preventDefault();
     scene.tap();
 });
 
-on(document, "keydown", function (e) {
-    e.preventDefault();
+on(document, "keydown", (e) => {
     if (e.keyCode == 32) {
+        e.preventDefault();
         scene.tap();
     }
 });
 
-on(window, "resize", function () {
+on(window, "resize", () => {
     cam.resize();
 });
 
-sprite.render();
-update();
+sprite.render(() => {
+    update();
+});

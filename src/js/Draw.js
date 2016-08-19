@@ -108,11 +108,14 @@ class Draw {
         return this;
     }
 
-    merge(store) {
+    merge(store, callback) {
         let img = new Image();
         img.src = this.ctx.canvas.toDataURL();
         if (store) {
             this.store = img;
+        }
+        if (callback) {
+            img.onload = () => callback.call(img);
         }
         return img;
     }

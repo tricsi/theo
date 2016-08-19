@@ -4,7 +4,7 @@ class Sprite {
         this.draw = draw;
     }
 
-    render() {
+    render(callback) {
         const draw = this.draw;
         draw.begin();
         for (let y=1; y>-2; y--) {
@@ -22,7 +22,7 @@ class Sprite {
         }
         draw.to(0, 24);
         this.door();
-        draw.end().merge(true);
+        draw.end().merge(true, callback);
     }
 
     door() {
