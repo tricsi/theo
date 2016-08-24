@@ -21,12 +21,12 @@ class Sprite {
 
         draw.to(0, 72);
         for (let a=0; a<3; a++) {
-            draw.begin().to(a * 24, 0);
+            draw.begin().to(a * 32, 0);
             this.cog(a * 10);
             draw.end();
         }
 
-        draw.to(0, 24);
+        draw.to(0, 32);
         this.door();
         draw.end().merge(true, callback);
     }
@@ -75,12 +75,12 @@ class Sprite {
     cog(a) {
         this.draw
             .begin()
-            .to(12, 12)
+            .to(16, 16)
             .rotate(a)
-            .ngon(12, 11.3, 8)
+            .ngon(15, 15.3, 12)
             .fill(3)
             .stroke()
-            .ellipse(2.3)
+            .ellipse(3)
             .fill(0)
             .end();
     }

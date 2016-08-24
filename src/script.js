@@ -7,7 +7,7 @@ const scene = new Scene(
     new Room([1, 32, 5, 29, 2, 4, 29, 7, 7, 10, 29, 13, 7, 22, 26, 19, 10, 16, 29, 32, 32, 1, 1], 24),
     new Door(new Vec(580, 517), new Vec(100, 757)),
     [
-        new Cog(new Vec(400, 85))
+        new Cog(new Vec(400, 80))
     ]
 );
 
