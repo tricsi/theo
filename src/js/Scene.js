@@ -15,6 +15,7 @@ class Scene {
         if (!this.img) {
             this.room.render(draw);
             this.enter.render(draw);
+            this.mobs.forEach((mob) => mob.pre(draw));
             this.img = draw.merge();
         } else {
             draw.img(this.img);

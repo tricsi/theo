@@ -55,14 +55,28 @@ class Draw {
         return this;
     }
 
+    line(x, y) {
+        if (x instanceof Vec) {
+            y = x.y;
+            x = x.x;
+        }
+        const ctx = this.ctx;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(x, y);
+        ctx.closePath();
+        return this;
+    }
+
     rect(width, height, color) {
+        const ctx = this.ctx;
         if (color !== undefined) {
             ctx.fillStyle = this.rgb[color || 0];
-            this.ctx.fillRect(0, 0, width, height);
+            ctx.fillRect(0, 0, width, height);
             return this;
         }
         ctx.beginPath();
-        this.ctx.rect(0, 0, width, height);
+        ctx.rect(0, 0, width, height);
         ctx.closePath();
         return this;
     }
@@ -70,7 +84,7 @@ class Draw {
     ellipse(rad1, rad2, angle) {
         const ctx = this.ctx;
         ctx.beginPath();
-        this.ctx.ellipse(0, 0, rad1, rad2 || rad1, angle || 0, 0, 2 * Math.PI);
+        ctx.ellipse(0, 0, rad1, rad2 || rad1, angle || 0, 0, 2 * Math.PI);
         ctx.closePath();
         return this;
     }
