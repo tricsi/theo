@@ -7,6 +7,7 @@ class Hero {
         this.minSpeed = new Vec();
         this.maxSpeed = new Vec(3, 5);
         this.jumpSpeed = new Vec(3, -5);
+        this.jumpSfx = new Sfx([2,,0.1108,,0.1802,0.4645,,0.2397,,,,,,0.1456,,,,,0.7264,,,0.2311,,0.5]);
         this.collide = new Vec();
         this.stop();
     }
@@ -69,6 +70,9 @@ class Hero {
     }
 
     jump() {
+        if (!this.alive) {
+            return;
+        }
         const collide = this.collide;
         if (collide.x || collide.y) {
             this.speed.y = this.jumpSpeed.y;
@@ -76,6 +80,7 @@ class Hero {
                 this.turn();
             }
         }
+        this.jumpSfx.play();
     }
 
 }

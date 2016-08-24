@@ -5,6 +5,7 @@ class Door {
         this.key = key || false;
         this.open = key ? false : true;
         this.size = 10;
+        this.keySfx = new Sfx([0,,0.0354,,0.4903,0.4187,,0.3668,,,,,,0.5161,,0.4372,,,1,,,,,0.5]);
     }
 
     render(draw) {
@@ -20,6 +21,7 @@ class Door {
         if (!this.key) {
             this.open = hero.pos.clone().sub(this.pos).mag() < this.size;
         } else if (hero.pos.clone().sub(this.key).mag() < this.size) {
+            this.keySfx.play();
             this.key = false;
         }
     }
