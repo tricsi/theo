@@ -34,7 +34,7 @@ gulp.task("sass", ["clean"], function () {
 
 gulp.task("uglify", ["clean"], function (cb) {
     pump([
-        gulp.src(["src/js/*.js", "src/script.js"]),
+        gulp.src(["src/js/**/*.js", "src/script.js"]),
         concat("script.js"),
         insert.transform(function(contents, file) {
             return '"use strict";\nonload = function () {\n' + contents + '};';

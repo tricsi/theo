@@ -3,6 +3,7 @@ class Hero {
     constructor(pos) {
         this.pos = pos;
         this.size = 12;
+        this.alive = true;
         this.minSpeed = new Vec();
         this.maxSpeed = new Vec(3, 5);
         this.jumpSpeed = new Vec(3, -5);
@@ -21,14 +22,17 @@ class Hero {
 
     render(draw) {
         const pos = this.pos.clone().sub(12);
-        const vec = this.speed.clone().bit();
-        if (this.collide.x) {
-            vec.y = 0;
+        let vec = new Vec(72, 0);
+        if (this.alive) {
+            vec = this.speed.clone().bit();
+            if (this.collide.x) {
+                vec.y = 0;
+            }
+            if (this.collide.y) {
+                vec.x = 0;
+            }
+            vec.multiply(24).add(24);
         }
-        if (this.collide.y) {
-            vec.x = 0;
-        }
-        vec.multiply(24).add(24);
         draw.sprite(vec.x, vec.y, 24, 24, pos.x, pos.y);
     }
 

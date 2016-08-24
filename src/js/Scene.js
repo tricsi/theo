@@ -1,9 +1,10 @@
 class Scene {
 
-    constructor(hero, room, exit) {
+    constructor(hero, room, exit, mobs) {
         this.cam = cam;
         this.room = room;
         this.hero = hero;
+        this.mobs = mobs || [];
         this.exit = exit;
         this.enter = new Door(hero.pos.clone());
         this.run = false;
@@ -20,14 +21,19 @@ class Scene {
         }
         this.exit.render(draw);
         this.hero.render(draw);
+        this.mobs.forEach((mob) => mob.render(draw));
     }
 
     update() {
-        this.hero.update(this.room);
-        this.exit.update(this.hero);
-        if (this.exit.open) {
-            this.hero.stop();
+        const hero = this.hero;
+        const exit = this.exit;
+        if(!hero.alive || exit.open) {
+            hero.stop();
+            return;
         }
+        hero.update(this.room);
+        this.mobs.forEach((mob) => mob.update(hero));
+        exit.update(hero);
     }
 
     tap() {
