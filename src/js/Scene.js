@@ -29,6 +29,7 @@ class Scene {
         const hero = this.hero;
         const exit = this.exit;
         if(!hero.alive || exit.open) {
+            this.run = false;
             hero.stop();
             return;
         }
