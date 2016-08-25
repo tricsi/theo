@@ -34,6 +34,11 @@ class Draw {
         return this;
     }
 
+    composite(type) {
+        this.ctx.globalCompositeOperation = type || "source-over";
+        return this;
+    }
+
     fill(color) {
         const ctx = this.ctx;
         ctx.fillStyle = this.rgb[color || 0];

@@ -11,6 +11,7 @@ class Scene {
     }
 
     render(draw) {
+        draw.clear();
         if (!this.img) {
             this.room.render(draw);
             this.enter.render(draw);

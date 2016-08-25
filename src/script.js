@@ -3,13 +3,14 @@ const cam = new Camera(300);
 const draw = new Draw(ctx);
 const sprite = new Sprite(draw);
 const scene = new Scene(
-    new Hero(new Vec(250, 85)),
-    new Room([1, 32, 5, 29, 2, 4, 29, 7, 7, 10, 29, 13, 7, 22, 26, 19, 10, 16, 29, 32, 32, 1, 1], 24),
-    new Door(new Vec(580, 517), new Vec(100, 757)),
+    new Hero(new Vec(250, 101)),
+    new Room([0, 10, 2, 9, 1, 1, 9, 2, 2, 3, 9, 4, 2, 7, 8, 6, 3, 5, 9, 10, 10, 0, 0], 72, 40),
+    new Door(new Vec(580, 533), new Vec(140, 750)),
     [
-        new Cog(new Vec(350, 80), new Vec(450, 80))
+        new Cog(new Vec(350, 96), new Vec(450, 96))
     ]
 );
+
 
 function update() {
     window.requestAnimationFrame(update);
