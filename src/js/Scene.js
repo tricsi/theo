@@ -1,12 +1,11 @@
 class Scene {
 
     constructor(hero, room, exit, mobs) {
-        this.cam = cam;
         this.room = room;
         this.hero = hero;
         this.mobs = mobs || [];
         this.exit = exit;
-        this.enter = new Door(hero.pos.clone());
+        this.enter = new Door(hero.pos.clone().add(new Vec(12, 0)));
         this.run = false;
         this.img = false;
     }

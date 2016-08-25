@@ -18,7 +18,7 @@ gulp.task("clean", function () {
 });
 
 gulp.task("copy", ["clean"], function () {
-    gulp.src("src/index.html")
+    gulp.src("src/*.html")
         .pipe(gulp.dest("dist"));
 });
 
@@ -37,7 +37,21 @@ gulp.task("uglify", ["clean"], function (cb) {
         gulp.src(["src/jsfxr.js", "src/js/**/*.js", "src/script.js"]),
         concat("script.js"),
         insert.transform(function(contents, file) {
-            return '"use strict";\nonload = function () {\n' + contents + '};';
+            return `"use strict";\nonload = function () {\n${contents}};`;
+        }),
+        sourcemaps.init(),
+        minifier({mangle: true}, uglifyjs),
+        sourcemaps.write("."),
+        gulp.dest("dist")
+    ], cb);
+});
+
+gulp.task("editor", ["clean"], function (cb) {
+    pump([
+        gulp.src(["src/jsfxr.js", "src/js/**/*.js", "src/editor.js"]),
+        concat("editor.js"),
+        insert.transform(function(contents, file) {
+            return `"use strict";\nonload = function () {\n${contents}};`;
         }),
         sourcemaps.init(),
         minifier({mangle: true}, uglifyjs),
@@ -47,7 +61,7 @@ gulp.task("uglify", ["clean"], function (cb) {
 });
 
 gulp.task("zip", ["clean", "sass", "uglify", "copy"], function () {
-    return gulp.src(["dist/*.html", "dist/*.js", "dist/*.css"])
+    return gulp.src(["dist/index.html", "dist/script.js", "dist/style.css"])
         .pipe(zip("dist.zip"))
         .pipe(size({title: "Build", pretty: false}))
         .pipe(gulp.dest("."));
@@ -62,4 +76,4 @@ gulp.task("watch", ["server"], function () {
     gulp.watch("src/**/*.*", ["server"]);
 });
 
-gulp.task("default", ["clean", "sass", "uglify", "copy", "zip"]);
+gulp.task("default", ["clean", "sass", "uglify", "editor", "copy", "zip"]);
