@@ -5,9 +5,10 @@ const sprite = new Sprite(draw);
 const scene = new Scene(
     new Hero(new Vec(250, 101)),
     new Room([0, 10, 2, 9, 1, 1, 9, 2, 2, 3, 9, 4, 2, 7, 8, 6, 3, 5, 9, 10, 10, 0, 0], 72, 40),
-    new Door(new Vec(580, 533), new Vec(140, 750)),
+    new Door(new Vec(580, 533), new Vec(160, 750)),
     [
-        new Cog(new Vec(350, 96), new Vec(450, 96))
+        new Cog(new Vec(450, 96), new Vec(350, 96)),
+        new Evil(new Vec(500, 520))
     ]
 );
 

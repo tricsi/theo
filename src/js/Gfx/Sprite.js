@@ -12,6 +12,9 @@ class Sprite {
                 draw.begin().to(x*24+24, y*24+24);
                 this.hero(x, y);
                 draw.end();
+                draw.begin().to(x*24+120, y*24+24);
+                this.evil(x, y);
+                draw.end();
             }
         }
 
@@ -28,6 +31,7 @@ class Sprite {
 
         draw.to(0, 32);
         this.door();
+
         draw.end().merge(true, callback);
     }
 
@@ -85,19 +89,20 @@ class Sprite {
             .end();
     }
 
-    hero(x, y, dead) {
-        //head
+    head(x, y) {
         this.draw
-            .begin()
             .to(12, 12)
+            .begin()
             .ellipse(11.3)
             .fill(3)
             .stroke()
-            .begin()
             .to(-3-x, 5+y)
             .rect(6, 1, 0)
             .end();
-        //eye
+    }
+
+    hero(x, y, dead) {
+        this.head(x, y);
         if (dead) {
             this.draw
                 .to(-4, -2)
@@ -111,6 +116,40 @@ class Sprite {
                 .ellipse(2)
                 .fill(0);
         }
-        this.draw.end();
+    }
+
+    evil(x, y) {
+        this.head(x, y);
+        this.draw
+
+            .begin()
+            .to(-3-x, 6+y)
+            .ngon(3, 2.5)
+            .fill(0)
+            .end()
+            
+            .begin()
+            .to(3-x, 6+y)
+            .ngon(3, 2.5)
+            .fill(0)
+            .end()
+
+            .begin()
+            .to(x-4, y-3)
+            .ellipse(4)
+            .fill(1)
+            .to(x, y)
+            .ellipse(1.5)
+            .fill(0)
+            .end()
+
+            .begin()
+            .to(x+4, y-3)
+            .ellipse(4)
+            .fill(1)
+            .to(x, y)
+            .ellipse(1.5)
+            .fill(0)
+            .end();
     }
 }

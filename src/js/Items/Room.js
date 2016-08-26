@@ -44,4 +44,24 @@ class Room {
             .end();
     }
 
+    collide(pos, size) {
+        let collide = new Vec();
+        for (let i = 0; i < this.lines.length; i++) {
+            let line =  this.lines[i],
+                dot = line.project(pos),
+                vec = pos.clone().sub(dot),
+                distance = vec.mag();
+            if (distance < size) {
+                pos.add(vec.clone().div(distance).multiply(size - distance));
+                if (line.vertical()) {
+                    collide.y = 1;
+                }
+                if (line.horizontal()) {
+                    collide.x = 1;
+                }
+            }
+        }
+        return collide;
+    }
+
 }

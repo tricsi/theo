@@ -26,25 +26,23 @@ class Scene {
     }
 
     update() {
-        const hero = this.hero;
-        const exit = this.exit;
-        if(!hero.alive || exit.open) {
-            this.run = false;
-            hero.stop();
+        let hero = this.hero,
+            room = this.room,
+            exit = this.exit;
+        if (!this.run || !hero.alive || exit.open) {
             return;
         }
-        hero.update(this.room);
-        this.mobs.forEach((mob) => mob.update(hero));
+        hero.update(room);
+        this.mobs.forEach((mob) => mob.update(hero, room));
         exit.update(hero);
     }
 
     tap() {
         const hero = this.hero;
-        if (this.run) {
-            hero.jump();    
-        } else {
-            hero.start();
+        if (!this.run) {
             this.run = true;
+        } else if (hero.alive) {
+            hero.jump();    
         }
     }
 

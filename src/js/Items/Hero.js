@@ -4,26 +4,18 @@ class Hero {
         this.pos = pos;
         this.size = 12;
         this.alive = true;
+        this.speed = new Vec();
         this.minSpeed = new Vec();
         this.maxSpeed = new Vec(3, 5);
+        this.velocity = new Vec(.1, .15);
         this.jumpSpeed = new Vec(3, -5);
         this.jumpSfx = new Sfx([0,,0.123,,0.2154,0.301,,0.2397,,,,,,0.4311,,,,,1,,,0.1789,,0.46]);
         this.collide = new Vec();
-        this.stop();
-    }
-
-    stop() {
-        this.speed = new Vec();
-        this.velocity = new Vec();
-    }
-
-    start() {
-        this.velocity = new Vec(.1, .15);
     }
 
     render(draw) {
-        const pos = this.pos.clone().sub(12);
-        let vec = new Vec(72, 0);
+        let pos = this.pos.clone().sub(12),
+            vec = new Vec(72, 0);
         if (this.alive) {
             vec = this.speed.clone().bit();
             if (this.collide.x) {
@@ -38,25 +30,9 @@ class Hero {
     }
 
     update(room) {
-        let size = this.size,
-            collide = new Vec();
         this.speed.add(this.velocity).max(this.maxSpeed),
         this.pos.add(this.speed);
-        for (let i = 0; i < room.lines.length; i++) {
-            let line = room.lines[i],
-                dot = line.project(this.pos),
-                vec = this.pos.clone().sub(dot),
-                distance = vec.mag();
-            if (distance < size) {
-                this.pos.add(vec.clone().div(distance).multiply(size - distance));
-                if (line.vertical()) {
-                    collide.y = 1;
-                }
-                if (line.horizontal()) {
-                    collide.x = 1;
-                }
-            }
-        }
+        let collide = room.collide(this.pos, this.size);
         if (collide.x || (collide.y && !this.collide.y)) {
             this.speed.y = this.minSpeed.y;
         }
@@ -76,8 +52,8 @@ class Hero {
             if (collide.y && !collide.x) {
                 this.turn();
             }
+            this.jumpSfx.play();
         }
-        this.jumpSfx.play();
     }
 
 }
