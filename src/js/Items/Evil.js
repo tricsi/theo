@@ -4,7 +4,7 @@ class Evil {
         this.pos = pos;
         this.size = 12;
         this.speed = new Vec();
-        this.velociy = 1;
+        this.velociy = .5;
         this.collide = new Vec();
     }
 

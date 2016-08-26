@@ -62,8 +62,13 @@ class Vec {
     }
 
     multiply(value) {
-        this.x *= value;
-        this.y *= value;
+        if (value instanceof Vec) {
+            this.x *= value.x;
+            this.y *= value.y;
+        } else {
+            this.x *= value;
+            this.y *= value;
+        }
         return this;
     }
 
