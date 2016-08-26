@@ -8,18 +8,16 @@
 <body>
 
 <canvas id="game" width="800" height="800" style="float:left;"></canvas>
-<form>
-<button>save</button><br>
-<textarea id="code" cols="120" rows="51">
-new Scene(
-    new Hero(new Vec(250, 101)),
-    new Room([0, 10, 2, 9, 1, 1, 9, 2, 2, 3, 9, 4, 2, 7, 8, 6, 3, 5, 9, 10, 10, 0, 0], 72, 40),
-    new Door(new Vec(580, 533), new Vec(160, 750)),
-    [
-        new Cog(new Vec(450, 96), new Vec(350, 96)),
-        new Evil(new Vec(500, 520))
-    ]
-);
+<form id="form">
+<button>load</button>
+<input id="config" readonly size="110" />
+<br>
+<textarea id="code" cols="120" rows="50">
+R0,10,2,9,1,1,9,2,2,3,9,4,2,7,8,6,3,5,9,10,10,0,0
+H250,100
+D580,533,160,750
+C450,96,350,96
+E500,520
 </textarea>
 </form>
 <script src="editor.js"></script>
