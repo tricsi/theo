@@ -23,6 +23,7 @@ class Game {
             door,
             room,
             mobs = [],
+            text = [],
             rows = this.cfg[index].split("|");
         rows.forEach((row) => {
             let cmd = row.substr(0, 1),
@@ -49,9 +50,12 @@ class Game {
             case "E":
                 mobs.push(new Evil(this.pos(val[0], val[1]).sub(36, 36)));
                 break;
+            case "#":
+                text.push(row.substr(1));
+                break;
             }
         });
-        this.scene = new Scene(hero, room, door, mobs);
+        this.scene = new Scene(hero, room, door, mobs, text);
     }
 
     tap() {

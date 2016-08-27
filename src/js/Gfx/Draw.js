@@ -3,6 +3,7 @@ class Draw {
     constructor(ctx) {
         this.ctx = ctx;
         this.rgb = ["#000", "#fff", "#666", "#999", "#ccc"];
+        ctx.font = "13px sans-serif";
     }
 
     begin() {
@@ -122,7 +123,7 @@ class Draw {
         for (let i = 1; i < dots.length; i++) {
             dot = dots[i];
             ctx.lineTo(dot.x, dot.y);
-        };
+        }
         ctx.closePath();
         return this;
     }
@@ -137,6 +138,33 @@ class Draw {
             img.onload = () => callback.call(img);
         }
         return img;
+    }
+
+    text(value, color, back) {
+        let ctx = this.ctx,
+            line = 14,
+            width = 0,
+            height = 0;
+        if (!value instanceof Array) {
+            value = [value];
+        }
+        value.forEach((row) => {
+            let size = ctx.measureText(row);
+            if (size.width > width) {
+                width = size.width;
+            }
+        });
+        height = line * value.length;
+        this.begin()
+            .ngon(3, 5)
+            .fill(back)
+            .to(-10, -8-height)
+            .rect(width + 10, height + 6, back);
+        ctx.fillStyle = this.rgb[color];
+        for (let i = 0; i < value.length; i++) {
+            ctx.fillText(value[i], 5, i * line + 14);
+        }
+        return this.end();
     }
 
     img(img, x, y, w, h) {

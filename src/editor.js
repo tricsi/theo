@@ -5,7 +5,7 @@ const draw = new Draw(ctx);
 const game = new Game(draw, []);
 
 function load() {
-    let config = code.value.trim().replace(/\s+/gm, "|");
+    let config = code.value.trim().replace(/[\r\n]+/gm, "|");
     $("#config").value = config;
     game.cfg[0] = config;
     game.load(0);

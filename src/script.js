@@ -2,7 +2,7 @@ const ctx = $("#game").getContext("2d");
 const cam = new Camera(300);
 const draw = new Draw(ctx);
 const game = new Game(draw, [
-    "R3,7,7,6,3|H5,7|D6,7",
+    "R3,7,7,6,3|H5,7|D6,7|#Help me get out!",
     "R0,10,3,9,1,1,9,2,2,3,9,4,2,7,8,6,3,5,9,10,10,0,0|H3,1|D8,7,3,10|C5,1,6,1|E7,7"
 ]);
 

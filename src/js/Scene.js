@@ -5,7 +5,7 @@ class Scene {
         this.hero = hero;
         this.exit = exit;
         this.mobs = mobs || [];
-        this.text = text;
+        this.text = text || [];
         this.run = false;
         this.won = false;
         this.img = false;
@@ -23,6 +23,12 @@ class Scene {
         this.exit.render(draw);
         this.hero.render(draw);
         this.mobs.forEach((mob) => mob.render(draw));
+        if (!this.run && this.text) {
+            draw.begin()
+                .to(this.hero.pos.clone().add(-16, -12))
+                .text(this.text, 0, 4)
+                .end();
+        }
     }
 
     update() {
