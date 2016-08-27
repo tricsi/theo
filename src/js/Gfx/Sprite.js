@@ -36,11 +36,13 @@ class Sprite {
     }
 
     door() {
+        let blue = "#669",
+            dark = "#003";
         this.draw
             .begin()
             .rect(24, 32, 0)
             .to(1, 1)
-            .rect(22, 30, 4)
+            .rect(22, 30, "#630")
             .to(14, 14)
             .rect(5, 2, 0)
             .end()
@@ -57,45 +59,48 @@ class Sprite {
             .begin()
             .to(60, 8)
             .begin()
-            .to(-6, 16)
-            .rect(6, 8, 0)
+            .to(-7, 16)
+            .rect(6, 8, dark)
             .to(1, 1)
-            .rect(4, 6, 2)
+            .rect(4, 6, blue)
             .end()
             .begin()
-            .to(-2, 0)
-            .rect(6, 24, 0)
+            .to(-3, 0)
+            .rect(6, 24, dark)
             .to(1, 1)
-            .rect(4, 22, 2)
+            .rect(4, 22, blue)
             .end()
             .ellipse(10.5, 7)
-            .fill(2)
-            .stroke(0)
+            .fill(blue)
+            .stroke(dark)
             .ellipse(5, 3)
+            .composite("destination-out")
             .fill(1)
-            .stroke(0)
+            .composite()
+            .stroke(dark)
             .end();
     }
 
     cog(a) {
-        this.draw
-            .begin()
+        let draw = this.draw,
+            color = draw.grad("#ccc", "#666", 16);
+        draw.begin()
             .to(16, 16)
             .rotate(a)
             .ngon(15, 15.3, 12)
-            .fill(3)
+            .fill(color)
             .stroke()
             .ellipse(3)
             .fill(0)
             .end();
     }
 
-    head(x, y) {
+    head(x, y, color) {
         this.draw
             .to(12, 12)
             .begin()
             .ellipse(11.3)
-            .fill(3)
+            .fill(color)
             .stroke()
             .to(-3-x, 5+y)
             .rect(6, 1, 0)
@@ -103,14 +108,14 @@ class Sprite {
     }
 
     hero(x, y, dead) {
-        this.head(x, y);
+        let draw = this.draw,
+            color = draw.grad("#fc0", "#960", 12, -4, -4);
+        this.head(x, y, color);
         if (dead) {
-            this.draw
-                .to(-4, -2)
+            draw.to(-4, -2)
                 .rect(8, 2, 0);
         } else {
-            this.draw
-                .to(x, y-3)
+            draw.to(x, y-3)
                 .ellipse(5)
                 .fill(1)
                 .to(x, y)
@@ -120,10 +125,10 @@ class Sprite {
     }
 
     evil(x, y) {
-        this.head(x, y);
-        this.draw
-
-            .begin()
+        let draw = this.draw,
+            color = draw.grad("#0c0", "#060", 12, -4, -4);
+        this.head(x, y, color);
+        draw.begin()
             .to(-3-x, 6+y)
             .ngon(3, 2.5)
             .fill(0)

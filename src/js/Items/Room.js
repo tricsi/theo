@@ -33,12 +33,11 @@ class Room {
     render(draw) {
         let w = draw.ctx.canvas.width;
         let h = draw.ctx.canvas.height;
-        this.img = draw
+        draw
             .begin()
-            .rect(w, h, 2)
+            .rect(w, h, "#210")
             .path(this.dots)
-            .composite("destination-out")
-            .fill(1)
+            .fill("#fec")
             .composite()
             .stroke(0, 2)
             .end();

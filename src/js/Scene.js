@@ -23,9 +23,9 @@ class Scene {
         this.exit.render(draw);
         this.hero.render(draw);
         this.mobs.forEach((mob) => mob.render(draw));
-        if (!this.run && this.text) {
+        if (!this.run && this.text.length > 0) {
             draw.begin()
-                .to(this.hero.pos.clone().add(-16, -12))
+                .to(this.hero.pos.clone().add(-16, -22))
                 .text(this.text, 0, 4)
                 .end();
         }

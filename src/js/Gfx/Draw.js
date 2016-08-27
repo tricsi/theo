@@ -2,8 +2,35 @@ class Draw {
 
     constructor(ctx) {
         this.ctx = ctx;
-        this.rgb = ["#000", "#fff", "#666", "#999", "#ccc"];
+        this.rgb = [
+            "#000",                    // 0 = black
+            "#fff",                    // 1 = white
+            "#666",                    // 2 = dark grey
+            "#999",                    // 3 = grey
+            "#ccc"                     // 4 = light gray
+        ];
         ctx.font = "13px sans-serif";
+    }
+
+    color(value) {
+        value = value || 0;
+        return value in this.rgb ? this.rgb[value] : value;
+    }
+
+    grad(color0, color1, r, x, y) {
+        let ctx = this.ctx,
+            color = ctx.createRadialGradient(x || 0, y || 0, 0, 0, 0, r);
+        color.addColorStop(0, color0);
+        color.addColorStop(1, color1);
+        return color;
+    }
+
+    glin(color0, color1, x1, y1, x2, y2) {
+        let ctx = this.ctx,
+            color = ctx.createLinearGradient(x1, y1, x2, y2);
+        color.addColorStop(0, color0);
+        color.addColorStop(1, color1);
+        return color;
     }
 
     begin() {
@@ -42,7 +69,7 @@ class Draw {
 
     fill(color) {
         const ctx = this.ctx;
-        ctx.fillStyle = this.rgb[color || 0];
+        ctx.fillStyle = this.color(color);
         ctx.fill();
         return this;
     }
@@ -50,7 +77,7 @@ class Draw {
     stroke(color, size) {
         const ctx = this.ctx;
         ctx.lineWidth = size || 1;
-        ctx.strokeStyle = this.rgb[color || 0];
+        ctx.strokeStyle = this.color(color);
         ctx.stroke();
         return this;
     }
@@ -77,7 +104,7 @@ class Draw {
     rect(width, height, color) {
         const ctx = this.ctx;
         if (color !== undefined) {
-            ctx.fillStyle = this.rgb[color || 0];
+            ctx.fillStyle = this.color(color);
             ctx.fillRect(0, 0, width, height);
             return this;
         }
@@ -160,7 +187,7 @@ class Draw {
             .fill(back)
             .to(-10, -8-height)
             .rect(width + 10, height + 6, back);
-        ctx.fillStyle = this.rgb[color];
+        ctx.fillStyle = this.color(color);
         for (let i = 0; i < value.length; i++) {
             ctx.fillText(value[i], 5, i * line + 14);
         }

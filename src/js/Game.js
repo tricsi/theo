@@ -5,6 +5,7 @@ class Game {
         this.cfg = config;
         this.grid = 72;
         this.margin = 40;
+        this.index = 0;
     }
 
     update() {
@@ -16,6 +17,14 @@ class Game {
         return new Vec(x, y)
             .multiply(this.grid)
             .add(this.margin);
+    }
+
+    next() {
+        let index = this.index + 1;
+        if (index >= this.cfg.length) {
+            index = 0;
+        }
+        this.load(index);
     }
 
     load(index) {
@@ -55,6 +64,7 @@ class Game {
                 break;
             }
         });
+        this.index = index;
         this.scene = new Scene(hero, room, door, mobs, text);
     }
 
@@ -62,11 +72,13 @@ class Game {
         let scene = this.scene,
             hero = scene.hero;
         if (scene.won) {
-            //TODO new scene
+            this.next();
         } else if (!scene.run) {
             scene.run = true;
         } else if (hero.alive) {
             hero.jump();    
+        } else {
+            this.load(this.index);
         }
     }
 
