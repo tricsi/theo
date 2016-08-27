@@ -33,42 +33,55 @@ class Vec {
         return this;
     }
 
-    add(value) {
-        if (value instanceof Vec) {
-            this.x += value.x;
-            this.y += value.y;
-        } else {
-            this.x += value;
-            this.y += value;
+    add(x, y) {
+        if (x instanceof Vec) {
+            y = x.y;
+            x = x.x;
         }
+        if (y === undefined) {
+            y = x;
+        }
+        this.x += x;
+        this.y += y;
         return this;
     }
 
-    sub(value) {
-        if (value instanceof Vec) {
-            this.x -= value.x;
-            this.y -= value.y;
-        } else {
-            this.x -= value;
-            this.y -= value;
+    sub(x, y) {
+        if (x instanceof Vec) {
+            y = x.y;
+            x = x.x;
         }
+        if (y === undefined) {
+            y = x;
+        }
+        this.x -= x;
+        this.y -= y;
         return this;
     }
 
-    div(value) {
-        this.x = value > 0 ? this.x / value : 0;
-        this.y = value > 0 ? this.y / value : 0;
+    div(x, y) {
+        if (x instanceof Vec) {
+            y = x.y;
+            x = x.x;
+        }
+        if (y === undefined) {
+            y = x;
+        }
+        this.x = x > 0 ? this.x / x : 0;
+        this.y = y > 0 ? this.y / y : 0;
         return this;
     }
 
-    multiply(value) {
-        if (value instanceof Vec) {
-            this.x *= value.x;
-            this.y *= value.y;
-        } else {
-            this.x *= value;
-            this.y *= value;
+    multiply(x, y) {
+        if (x instanceof Vec) {
+            y = x.y;
+            x = x.x;
         }
+        if (y === undefined) {
+            y = x;
+        }
+        this.x *= x;
+        this.y *= y;
         return this;
     }
 

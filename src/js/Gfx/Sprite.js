@@ -36,7 +36,8 @@ class Sprite {
     }
 
     door() {
-        draw.begin()
+        this.draw
+            .begin()
             .rect(24, 32, 0)
             .to(1, 1)
             .rect(22, 30, 4)

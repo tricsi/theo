@@ -18,13 +18,18 @@ class Door {
     }
 
     update(hero) {
-        let dist = hero.size + this.size;
+        let dist = hero.size + this.size,
+            result = false;
         if (!this.key) {
-            this.open = hero.pos.clone().sub(this.pos).mag() < this.size;
+            result = hero.pos.clone().sub(this.pos).mag() < this.size;
         } else if (hero.pos.clone().sub(this.key).mag() < dist) {
             this.keySfx.play();
             this.key = false;
         }
+        if (result) {
+            this.open = true;
+        }
+        return result;
     }
 
 }

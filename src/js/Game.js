@@ -1,7 +1,21 @@
 class Game {
 
-    constructor(config) {
+    constructor(draw, config) {
+        this.draw = draw;
         this.cfg = config;
+        this.grid = 72;
+        this.margin = 40;
+    }
+
+    update() {
+        this.scene.update();
+        this.scene.render(this.draw);
+    }
+
+    pos(x, y) {
+        return new Vec(x, y)
+            .multiply(this.grid)
+            .add(this.margin);
     }
 
     load(index) {
@@ -15,28 +29,41 @@ class Game {
                 val = row.substr(1).split(",").map(parseFloat);
             switch (cmd) {
             case "H":
-                hero = new Hero(new Vec(val[0], val[1]));
+                hero = new Hero(this.pos(val[0], val[1]).sub(36, 12));
                 break;
             case "R":
-                room = new Room(val, 72, 40);
+                room = new Room(val, this.grid, this.margin);
                 break;
             case "D":
-                door = val.length > 2
-                    ? new Door(new Vec(val[0], val[1]), new Vec(val[2], val[3]))
-                    : new Door(new Vec(val[0], val[1]));
-                break;
-            case "C":
-                mobs.push(val.length > 2
-                    ? new Cog(new Vec(val[0], val[1]), new Vec(val[2], val[3]))
-                    : new Cog(new Vec(val[0], val[1]))
+                door = new Door(
+                    this.pos(val[0], val[1]).sub(36, 12), 
+                    val.length > 2 ? this.pos(val[2], val[3]).sub(36, 12) : null
                 );
                 break;
+            case "C":
+                mobs.push(new Cog(
+                    this.pos(val[0], val[1]).sub(36, 16),
+                    val.length > 2 ? this.pos(val[2], val[3]).sub(36, 16) : null
+                ));
+                break;
             case "E":
-                mobs.push(new Evil(new Vec(val[0], val[1])));
+                mobs.push(new Evil(this.pos(val[0], val[1]).sub(36, 36)));
                 break;
             }
         });
-        return new Scene(hero, room, door, mobs);
+        this.scene = new Scene(hero, room, door, mobs);
+    }
+
+    tap() {
+        let scene = this.scene,
+            hero = scene.hero;
+        if (scene.won) {
+            //TODO new scene
+        } else if (!scene.run) {
+            scene.run = true;
+        } else if (hero.alive) {
+            hero.jump();    
+        }
     }
 
 }
