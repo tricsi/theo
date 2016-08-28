@@ -38,6 +38,7 @@ class Sprite {
     door() {
         let blue = "#669",
             dark = "#003",
+            rock = draw.grad("#ccc", "#999", 24),
             sky = draw.glin("#09c", "#0cf", 0, 0, 0, 24);
         this.draw
             .begin()
@@ -92,6 +93,21 @@ class Sprite {
             .stroke(0, 2)
             .to(10, 0)
             .rect(10, 22)
+            .stroke(0, 2)
+            .end()
+
+            .begin()
+            .to(105, 1)
+            .rect(14, 11)
+            .fill(rock)
+            .stroke(0, 2)
+            .to(14, 0)
+            .rect(14, 11)
+            .fill(rock)
+            .stroke(0, 2)
+            .to(-7, 11)
+            .rect(14, 11)
+            .fill(rock)
             .stroke(0, 2)
             .end();
     }

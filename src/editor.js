@@ -28,5 +28,5 @@ on(form, "submit", (e) => {
 
 new Sprite(draw).render(() => {
     load();
-    //update();
+    update();
 });
