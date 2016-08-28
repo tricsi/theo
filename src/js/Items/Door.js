@@ -1,7 +1,7 @@
-class Door {
+class Door extends Item {
 
     constructor(pos, key) {
-        this.pos = pos;
+        super(pos);
         this.key = key || false;
         this.open = key ? false : true;
         this.size = 10;

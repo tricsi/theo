@@ -1,14 +1,12 @@
-class Evil {
+class Evil extends Item {
 
     constructor(pos) {
-        this.pos = pos;
+        super(pos);
         this.size = 12;
         this.speed = new Vec();
         this.velociy = .5;
         this.collide = new Vec();
     }
-
-    pre(draw) {}
 
     update(hero, room) {
         this.speed = hero.pos.clone().sub(this.pos).norm().multiply(this.velociy);

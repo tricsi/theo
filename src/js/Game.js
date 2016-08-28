@@ -59,6 +59,9 @@ class Game {
             case "E":
                 mobs.push(new Evil(this.pos(val[0], val[1]).sub(36, 36)));
                 break;
+            case "W":
+                mobs.push(new Window(this.pos(val[0], val[1]).sub(36, 36)));
+                break;
             case "#":
                 text.push(row.substr(1));
                 break;

@@ -1,7 +1,7 @@
-class Hero {
+class Hero extends Item {
 
     constructor(pos) {
-        this.pos = pos;
+        super(pos);
         this.size = 12;
         this.alive = true;
         this.speed = new Vec();

@@ -1,7 +1,7 @@
-class Cog {
+class Cog extends Item {
 
     constructor(pos1, pos2) {
-        this.pos = pos1.clone();
+        super(pos1.clone());
         this.line = pos2 ? new Line(pos1, pos2) : null;
         this.size = 16;
         this.speed = 1;
