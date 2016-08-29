@@ -13,10 +13,17 @@ class Game {
         this.scene.render(this.draw);
     }
 
-    pos(x, y) {
-        return new Vec(x, y)
-            .multiply(this.grid)
-            .add(this.margin);
+    pos(values, y, x) {
+        if (values.length < 2) {
+            return null;
+        }
+        let margin = this.margin,
+            grid = this.grid;
+        x = margin + (x || grid / 2);
+        y = margin + (y || grid / 2);
+        return new Vec(values.shift(), values.shift())
+            .multiply(grid)
+            .add(x, y);
     }
 
     next() {
@@ -39,28 +46,23 @@ class Game {
                 val = row.substr(1).split(",").map(parseFloat);
             switch (cmd) {
             case "H":
-                hero = new Hero(this.pos(val[0], val[1]).sub(36, 12));
+                hero = new Hero(this.pos(val, 60));
                 break;
             case "R":
                 room = new Room(val, this.grid, this.margin);
                 break;
             case "D":
-                door = new Door(
-                    this.pos(val[0], val[1]).sub(36, 12), 
-                    val.length > 2 ? this.pos(val[2], val[3]).sub(36, 12) : null
-                );
+                door = new Door(this.pos(val, 60), this.pos(val, 60));
                 break;
             case "C":
-                mobs.push(new Cog(
-                    this.pos(val[0], val[1]).sub(36, 16),
-                    val.length > 2 ? this.pos(val[2], val[3]).sub(36, 16) : null
+                mobs.push(new Cog(this.pos(val, 56), this.pos(val, 56)
                 ));
                 break;
             case "E":
-                mobs.push(new Evil(this.pos(val[0], val[1]).sub(36, 36)));
+                mobs.push(new Evil(this.pos(val)));
                 break;
             case "W":
-                mobs.push(new Window(this.pos(val[0], val[1]).sub(36, 36)));
+                mobs.push(new Window(this.pos(val)));
                 break;
             case "#":
                 text.push(row.substr(1));
