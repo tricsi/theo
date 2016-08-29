@@ -42,9 +42,19 @@ class Room {
     pre(draw) {
         let w = draw.ctx.canvas.width;
         let h = draw.ctx.canvas.height;
-        draw.begin().rect(w, h, "#210");
+        draw.begin().rect(w, h, "#420");
+        for (let i = 0; i < 100; i++) {
+            let width = Math.round(Math.rnd(8, 10)),
+                height = Math.round(Math.rnd(4, 6)),
+                x = Math.round(Math.rnd(0, w - width)),
+                y = Math.round(Math.rnd(0, h - height));
+            draw.begin()
+                .to(x, y)
+                .rect(width, height, "#530")
+                .end();
+        }
         for (let i = 0; i < this.dots.length; i++) {
-            draw.path(this.dots[i]).fill(i ? "#210" : "#fec").stroke(0, 2);
+            draw.path(this.dots[i]).fill(i ? "#420" : "#fec").stroke(0, 2);
         }
         draw.end();
         for (let i = 0; i < this.glitch.length; i++) {
@@ -52,8 +62,8 @@ class Room {
             draw.begin()
                 .to(line.begin)
                 .line(line.end.clone().sub(line.begin))
-                .shadow("#f0f")
-                .stroke("#f0f", 3)
+                .shadow("#c0c")
+                .stroke("#c0c", 3)
                 .end();
         }
     }

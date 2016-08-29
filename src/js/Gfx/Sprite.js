@@ -37,14 +37,12 @@ class Sprite {
 
     door() {
         let blue = "#669",
-            dark = "#003",
-            rock = draw.grad("#ccc", "#999", 24),
-            sky = draw.glin("#09c", "#0cf", 0, 0, 0, 24);
+            dark = "#003";
         this.draw
             .begin()
             .rect(24, 32, 0)
             .to(1, 1)
-            .rect(22, 30, "#630")
+            .rect(22, 30, "#960")
             .to(14, 14)
             .rect(5, 2, 0)
             .end()
@@ -80,35 +78,6 @@ class Sprite {
             .fill(1)
             .composite()
             .stroke(dark)
-            .end()
-
-            .begin()
-            .to(72, 0)
-            .rect(32, 24, sky)
-            .to(1, 1)
-            .rect(10, 22)
-            .stroke(0, 2)
-            .to(10, 0)
-            .rect(10, 22)
-            .stroke(0, 2)
-            .to(10, 0)
-            .rect(10, 22)
-            .stroke(0, 2)
-            .end()
-
-            .begin()
-            .to(105, 1)
-            .rect(14, 11)
-            .fill(rock)
-            .stroke(0, 2)
-            .to(14, 0)
-            .rect(14, 11)
-            .fill(rock)
-            .stroke(0, 2)
-            .to(-7, 11)
-            .rect(14, 11)
-            .fill(rock)
-            .stroke(0, 2)
             .end();
     }
 

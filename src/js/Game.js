@@ -72,6 +72,7 @@ class Game {
                 break;
             }
         });
+        Math.seed = index;
         this.index = index;
         this.scene = new Scene(hero, room, door, mobs, text);
     }
