@@ -35,7 +35,7 @@ class Cog extends Item {
         if (line) {
             pos.add(line.vec.clone().multiply(speed));
             let dist = pos.clone().sub(line.end).mag();
-            if (dist <= speed) {
+            if (dist < speed) {
                 pos = line.end.clone();
                 this.line = new Line(line.end, line.begin);
             }

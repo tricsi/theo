@@ -4,14 +4,16 @@ class Evil extends Item {
         super(pos);
         this.size = 12;
         this.speed = new Vec();
-        this.velociy = .5;
+        this.velociy = .7;
         this.collide = new Vec();
     }
 
     update(hero, room) {
         this.speed = hero.pos.clone().sub(this.pos).norm().multiply(this.velociy);
-        this.pos.add(this.speed);
-        this.collide = room.collide(this.pos, this.size);
+        this.pos.x += this.speed.x;
+        this.collide.y = room.collide(this.pos, this.size, true);
+        this.pos.y += this.speed.y;
+        this.collide.x = room.collide(this.pos, this.size, true);
         if (hero.pos.clone().sub(this.pos).mag() < this.size + hero.size) {
             hero.alive = false;
         }

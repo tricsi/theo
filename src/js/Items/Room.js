@@ -25,17 +25,9 @@ class Room {
                 y = data[i + 1] * grid;
             }
             dots.push(new Vec(x, y).add(margin));
-            if (i % 2) {
-                lines.push(new Line(dots[j], dots[++j]));
-            } else {
-                lines.unshift(new Line(dots[j], dots[++j]));
-            }
+            lines.push(new Line(dots[j], dots[++j]));
         }
-        if (i % 2) {
-            lines.push(new Line(dots[j], dots[0]));
-        } else {
-            lines.unshift(new Line(dots[j], dots[0]));
-        }
+        lines.push(new Line(dots[j], dots[0]));
         this.dots.push(dots);
     }
 
@@ -70,7 +62,7 @@ class Room {
     }
 
     collide(pos, size, glitch) {
-        let collide = new Vec();
+        let collide = 0;
         for (let i = 0; i < this.lines.length; i++) {
             if (glitch && this.glitch.indexOf(i) > -1) {
                 continue;
@@ -81,12 +73,7 @@ class Room {
                 distance = vec.mag();
             if (distance < size) {
                 pos.add(vec.clone().div(distance).multiply(size - distance));
-                if (line.vertical()) {
-                    collide.y = 1;
-                }
-                if (line.horizontal()) {
-                    collide.x = 1;
-                }
+                collide = 1;
             }
         }
         return collide;

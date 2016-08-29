@@ -30,9 +30,12 @@ class Hero extends Item {
     }
 
     update(room) {
+        let collide = new Vec();
         this.speed.add(this.velocity).max(this.maxSpeed),
-        this.pos.add(this.speed);
-        let collide = room.collide(this.pos, this.size, true);
+        this.pos.x += this.speed.x;
+        collide.y = room.collide(this.pos, this.size, true);
+        this.pos.y += this.speed.y;
+        collide.x = room.collide(this.pos, this.size, true);
         if (collide.x || (collide.y && !this.collide.y)) {
             this.speed.y = this.minSpeed.y;
         }
