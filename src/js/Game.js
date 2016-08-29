@@ -37,7 +37,7 @@ class Game {
     load(index) {
         let hero,
             door,
-            room,
+            room = new Room(this.grid, this.margin),
             mobs = [],
             text = [],
             rows = this.cfg[index].split("|");
@@ -48,8 +48,11 @@ class Game {
             case "H":
                 hero = new Hero(this.pos(val, 60));
                 break;
-            case "R":
-                room = new Room(val, this.grid, this.margin);
+            case "M":
+                room.map(val);
+                break;
+            case "G":
+                room.glitch = val;
                 break;
             case "D":
                 door = new Door(this.pos(val, 60), this.pos(val, 60));

@@ -17,6 +17,15 @@ class Draw {
         return value in this.rgb ? this.rgb[value] : value;
     }
 
+    shadow(color, blur, x, y) {
+        let ctx = this.ctx;
+        ctx.shadowColor = this.color(color || 0);
+        ctx.shadowBlur = blur || 3;
+        ctx.shadowOffsetX = x || 0;
+        ctx.shadowOffsetY = y || 0;
+        return this;
+    }
+
     grad(color0, color1, r, x, y) {
         let ctx = this.ctx,
             color = ctx.createRadialGradient(x || 0, y || 0, 0, 0, 0, r);

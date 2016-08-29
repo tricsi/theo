@@ -1,18 +1,28 @@
 class Room {
 
-    constructor(map, grid, margin) {
+    constructor(grid, margin) {
+        this.grid = grid;
+        this.margin = margin;
+        this.dots = [];
+        this.lines = [];
+        this.glitch = [];
+    }
+
+    map(data) {
+        let grid = this.grid;
+        let margin = this.margin;
+        let lines = this.lines;
         let dots = [];
-        let lines = [];
         let i = 0;
         let j = 0;
-        let x = map[0] * grid;
-        let y = map[1] * grid;
+        let x = data[0] * grid;
+        let y = data[1] * grid;
         dots.push(new Vec(x, y).add(margin));
-        for (i = 1; i < map.length - 1; i++) {
+        for (i = 1; i < data.length - 1; i++) {
             if (i % 2) {
-                x = map[i + 1] * grid;
+                x = data[i + 1] * grid;
             } else {
-                y = map[i + 1] * grid;
+                y = data[i + 1] * grid;
             }
             dots.push(new Vec(x, y).add(margin));
             if (i % 2) {
@@ -26,26 +36,34 @@ class Room {
         } else {
             lines.unshift(new Line(dots[j], dots[0]));
         }
-        this.dots = dots;
-        this.lines = lines;
+        this.dots.push(dots);
     }
 
-    render(draw) {
+    pre(draw) {
         let w = draw.ctx.canvas.width;
         let h = draw.ctx.canvas.height;
-        draw
-            .begin()
-            .rect(w, h, "#210")
-            .path(this.dots)
-            .fill("#fec")
-            .composite()
-            .stroke(0, 2)
-            .end();
+        draw.begin().rect(w, h, "#210");
+        for (let i = 0; i < this.dots.length; i++) {
+            draw.path(this.dots[i]).fill(i ? "#210" : "#fec").stroke(0, 2);
+        }
+        draw.end();
+        for (let i = 0; i < this.glitch.length; i++) {
+            let line = this.lines[this.glitch[i]];
+            draw.begin()
+                .to(line.begin)
+                .line(line.end.clone().sub(line.begin))
+                .shadow("#f0f")
+                .stroke("#f0f", 3)
+                .end();
+        }
     }
 
-    collide(pos, size) {
+    collide(pos, size, glitch) {
         let collide = new Vec();
         for (let i = 0; i < this.lines.length; i++) {
+            if (glitch && this.glitch.indexOf(i) > -1) {
+                continue;
+            }
             let line =  this.lines[i],
                 dot = line.project(pos),
                 vec = pos.clone().sub(dot),
