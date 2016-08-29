@@ -194,7 +194,7 @@ class Draw {
         this.begin()
             .ngon(3, 5)
             .fill(back)
-            .to(-10, -8-height)
+            .to(-10, -7-height)
             .rect(width + 10, height + 6, back);
         ctx.fillStyle = this.color(color);
         for (let i = 0; i < value.length; i++) {

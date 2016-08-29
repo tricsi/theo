@@ -40,9 +40,13 @@ class Room {
     }
 
     pre(draw) {
-        let w = draw.ctx.canvas.width;
-        let h = draw.ctx.canvas.height;
+        let w = draw.ctx.canvas.width,
+            h = draw.ctx.canvas.height,
+            color = "rgba(0,0,0,.1)";
         draw.begin().rect(w, h, "#420");
+        for (let i = 0; i < this.dots.length; i++) {
+            draw.path(this.dots[i]).fill(i ? "#420" : "#fec").stroke(0, 2);
+        }
         for (let i = 0; i < 100; i++) {
             let width = Math.round(Math.rnd(8, 10)),
                 height = Math.round(Math.rnd(4, 6)),
@@ -50,11 +54,8 @@ class Room {
                 y = Math.round(Math.rnd(0, h - height));
             draw.begin()
                 .to(x, y)
-                .rect(width, height, "#530")
+                .rect(width, height, color)
                 .end();
-        }
-        for (let i = 0; i < this.dots.length; i++) {
-            draw.path(this.dots[i]).fill(i ? "#420" : "#fec").stroke(0, 2);
         }
         draw.end();
         for (let i = 0; i < this.glitch.length; i++) {
