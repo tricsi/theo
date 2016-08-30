@@ -9,6 +9,7 @@ function load() {
     $("#config").value = config;
     game.cfg[0] = config;
     game.load(0);
+    localStorage.setItem("editor", config);
 }
 
 function update() {
@@ -27,6 +28,10 @@ on(form, "submit", (e) => {
 });
 
 new Sprite(draw).render(() => {
+    let config = localStorage.getItem("editor");
+    if (config) {
+        code.value = config.replace(/\|/gm, "\n");
+    }
     load();
     update();
 });
