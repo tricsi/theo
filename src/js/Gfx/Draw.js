@@ -67,7 +67,7 @@ class Draw {
     }
 
     rotate(angle) {
-        this.ctx.rotate(2 * Math.PI / angle);
+        this.ctx.rotate(angle * Math.PI / 180);
         return this;
     }
 

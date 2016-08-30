@@ -64,6 +64,9 @@ class Game {
             case "E":
                 mobs.push(new Evil(this.pos(val)));
                 break;
+            case "B":
+                mobs.push(new Boss(this.pos(val)));
+                break;
             case "W":
                 mobs.push(new Window(this.pos(val)));
                 break;

@@ -32,7 +32,52 @@ class Sprite {
         draw.to(0, 32);
         this.door();
 
+        draw.to(0, 32);
+        for (let a=0; a<6; a++) {
+            draw.begin().to(a * 72, 0);
+            this.boss(a * 15, a / 2);
+            draw.end();
+        }
+
         draw.end().merge(true, callback);
+    }
+
+    boss(angle, eye) {
+        let dark = "#339",
+            light = "#66c";
+        this.draw
+            .begin()
+            .to(36, 36)
+            .rotate(angle)
+            .to(-6, -32)
+            .rect(12, 64, dark)
+            .to(-26, 26)
+            .rect(64, 12, dark)
+            .end()
+
+            .begin()
+            .to(36, 36)
+            .rotate(angle + 45)
+            .to(-6, -32)
+            .rect(12, 64, light)
+            .to(-26, 26)
+            .rect(64, 12, light)
+            .end()
+            
+            .begin()
+            .to(16, 20)
+            .rect(40, 32)
+            .fill(light)
+            .stroke(0)
+            .to(12, 10)
+            .rect(16, 12, 1)
+            .to(3 + eye / 2, 2 + eye / 2)
+            .rect(10 - eye, 8 - eye, 0)
+            .end();
+    }
+
+    arms() {
+
     }
 
     door() {
@@ -95,9 +140,10 @@ class Sprite {
             .end();
     }
 
-    head(x, y, color) {
-        this.draw
-            .to(12, 12)
+    hero(x, y, dead) {
+        let draw = this.draw,
+            color = draw.grad("#fc0", "#960", 12, -4, -4);
+        draw.to(12, 12)
             .begin()
             .ellipse(11.3)
             .fill(color)
@@ -105,12 +151,6 @@ class Sprite {
             .to(-3-x, 5+y)
             .rect(6, 1, 0)
             .end();
-    }
-
-    hero(x, y, dead) {
-        let draw = this.draw,
-            color = draw.grad("#fc0", "#960", 12, -4, -4);
-        this.head(x, y, color);
         if (dead) {
             draw.to(-4, -2)
                 .rect(8, 2, 0);
@@ -127,34 +167,16 @@ class Sprite {
     evil(x, y) {
         let draw = this.draw,
             color = draw.grad("#0c0", "#060", 12, -4, -4);
-        this.head(x, y, color);
-        draw.begin()
-            .to(-3-x, 6+y)
-            .ngon(3, 2.5)
-            .fill(0)
-            .end()
-            
+        draw.to(12, 12)
             .begin()
-            .to(3-x, 6+y)
-            .ngon(3, 2.5)
-            .fill(0)
-            .end()
-
-            .begin()
-            .to(x-4, y-3)
-            .ellipse(4)
+            .ngon(20, 11.5, 10)
+            .fill(color)
+            .stroke()
+            .to(x, y)
+            .ellipse(4.5)
             .fill(1)
             .to(x, y)
-            .ellipse(1.5)
-            .fill(0)
-            .end()
-
-            .begin()
-            .to(x+4, y-3)
-            .ellipse(4)
-            .fill(1)
-            .to(x, y)
-            .ellipse(1.5)
+            .ellipse(2)
             .fill(0)
             .end();
     }
