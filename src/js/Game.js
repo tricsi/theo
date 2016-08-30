@@ -40,13 +40,17 @@ class Game {
             room = new Room(this.grid, this.margin),
             mobs = [],
             text = [],
-            rows = this.cfg[index].split("|");
+            rows = this.cfg[index].split("|"),
+            canvas = this.draw.ctx.canvas;
         rows.forEach((row) => {
             let cmd = row.substr(0, 1),
                 val = row.substr(1).split(",").map(parseFloat);
             switch (cmd) {
             case "H":
-                hero = new Hero(this.pos(val, 60));
+                hero = new Hero(this.pos(val, 60), new Vec(canvas.width, canvas.height));
+                if (val[0]) {
+                    hero.turn();
+                }
                 break;
             case "M":
                 room.map(val);
@@ -58,8 +62,7 @@ class Game {
                 door = new Door(this.pos(val, 60), this.pos(val, 60));
                 break;
             case "C":
-                mobs.push(new Cog(this.pos(val, 56), this.pos(val, 56)
-                ));
+                mobs.push(new Cog(this.pos(val, 56), this.pos(val, 56)));
                 break;
             case "E":
                 mobs.push(new Evil(this.pos(val)));

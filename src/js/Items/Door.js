@@ -4,7 +4,7 @@ class Door extends Item {
         super(pos);
         this.key = key || false;
         this.open = key ? false : true;
-        this.size = 10;
+        this.size = 5;
         this.keySfx = new Sfx([0,,0.0354,,0.4903,0.4187,,0.3668,,,,,,0.5161,,0.4372,,,1,,,,,0.5]);
     }
 
@@ -23,7 +23,7 @@ class Door extends Item {
         if (!this.key) {
             result = hero.pos.clone().sub(this.pos).mag() < this.size;
         } else if (hero.pos.clone().sub(this.key).mag() < dist) {
-            this.keySfx.play();
+            //this.keySfx.play();
             this.key = false;
         }
         if (result) {

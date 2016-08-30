@@ -1,10 +1,11 @@
 class Hero extends Item {
 
-    constructor(pos) {
+    constructor(pos, bound) {
         super(pos);
         this.size = 12;
+        this.bound = bound;
         this.alive = true;
-        this.speed = new Vec();
+        this.speed = new Vec(.1);
         this.minSpeed = new Vec();
         this.maxSpeed = new Vec(3, 5);
         this.velocity = new Vec(.1, .15);
@@ -30,16 +31,28 @@ class Hero extends Item {
     }
 
     update(room) {
-        let collide = new Vec();
+        let pos = this.pos,
+            size = this.size,
+            speed = this.speed,
+            bound = this.bound,
+            collide = new Vec();
         this.speed.add(this.velocity).max(this.maxSpeed),
-        this.pos.x += this.speed.x;
-        collide.y = room.collide(this.pos, this.size, true);
-        this.pos.y += this.speed.y;
-        collide.x = room.collide(this.pos, this.size, true);
+        pos.x += speed.x;
+        collide.y = room.collide(pos, size, true);
+        pos.y += speed.y;
+        collide.x = room.collide(pos, size, true);
         if (collide.x || (collide.y && !this.collide.y)) {
-            this.speed.y = this.minSpeed.y;
+            speed.y = this.minSpeed.y;
         }
         this.collide = collide;
+        if (
+            pos.x < -size ||
+            pos.y < -size || 
+            pos.x > bound.x + size ||
+            pos.y > bound.y + size
+        ) {
+            this.alive = false;
+        }
     }
 
     turn() {
@@ -55,7 +68,7 @@ class Hero extends Item {
             if (collide.y && !collide.x) {
                 this.turn();
             }
-            this.jumpSfx.play();
+            //this.jumpSfx.play();
         }
     }
 
