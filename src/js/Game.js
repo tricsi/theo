@@ -10,6 +10,9 @@ class Game {
 
     update() {
         this.scene.update();
+    }
+
+    render() {
         this.scene.render(this.draw);
     }
 

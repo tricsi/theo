@@ -27,7 +27,34 @@ function em(value, isText) {
  * @callback handler
  */
 function on(element, event, handler) {
-    element.addEventListener(event, handler, false);
+    event.split(",").forEach((name) => {
+        element.addEventListener(name.trim(), handler, false);
+    });
+}
+
+function fullscreen() {
+    const doc = document, 
+        html = doc.documentElement,
+        requestFullScreen =
+            html.requestFullscreen ||
+            html.mozRequestFullScreen || 
+            html.webkitRequestFullScreen || 
+            html.msRequestFullscreen,
+        cancelFullScreen =
+            doc.exitFullscreen ||
+            doc.mozCancelFullScreen ||
+            doc.webkitExitFullscreen ||
+            doc.msExitFullscreen;
+    if(
+        !doc.fullscreenElement &&
+        !doc.mozFullScreenElement &&
+        !doc.webkitFullscreenElement &&
+        !doc.msFullscreenElement
+    ) {
+        requestFullScreen.call(html);
+    } else {
+        cancelFullScreen.call(doc);
+    }
 }
 
 Math.seed = 6;

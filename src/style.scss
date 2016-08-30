@@ -5,11 +5,21 @@ html {
     width: 100%; 
     height: 100%;
     overflow: hidden;
+    font: bold 32px/48px sans-serif;
     background: #420;
+    color: #fff;
 }
 
 #game {
     position: absolute;
     left: 50%;
     top: 50%;
+}
+
+#full {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 48px;
+    text-align: center;
 }
