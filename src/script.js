@@ -20,7 +20,7 @@ function update() {
     cam.render(ctx);
 }
 
-on($("#full"), "mousedown,mousedown", (e) => {
+on($("#full"), "mousedown,touchstart", (e) => {
     e.preventDefault();
     e.stopPropagation();
     fullscreen();
