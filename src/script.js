@@ -22,13 +22,7 @@ function update() {
 
 on(document, "mousedown,touchstart", (e) => {
     e.preventDefault();
-    let x = document.documentElement.clientWidth - (e.clientX || e.touches[0].clientX),
-        y = e.clientY || e.touches[0].clientY;
-    if (x < 48 && y < 48) {
-        fullscreen();
-    } else {
-        game.tap();
-    }
+    game.tap();
 });
 
 on(document, "keydown", (e) => {
