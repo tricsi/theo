@@ -1,5 +1,5 @@
 let ctx = $("#game").getContext("2d"),
-    cam = new Camera(300),
+    cam = new Camera($("#cam").getContext("2d"), 300, "#420"),
     draw = new Draw(ctx),
     game = new Game(draw, [
         "M3,7,7,6,3|H4,6|D5,6|W6,6|#I have to escape!", //Prologue
@@ -13,22 +13,22 @@ let ctx = $("#game").getContext("2d"),
     ]);
 
 function update() {
-    requestAnimationFrame(update);
     game.update(); 
     game.render();
     cam.pos = game.scene.hero.pos;
     cam.render(ctx);
+    requestAnimationFrame(update);
 }
-
-on($("#full"), "mousedown,touchstart", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    fullscreen();
-});
 
 on(document, "mousedown,touchstart", (e) => {
     e.preventDefault();
-    game.tap();
+    let x = document.documentElement.clientWidth - (e.clientX || e.touches[0].clientX),
+        y = e.clientY || e.touches[0].clientY;
+    if (x < 48 && y < 48) {
+        fullscreen();
+    } else {
+        game.tap();
+    }
 });
 
 on(document, "keydown", (e) => {

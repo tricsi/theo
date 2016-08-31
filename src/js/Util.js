@@ -32,6 +32,7 @@ function on(element, event, handler) {
     });
 }
 
+/*
 function fullscreen() {
     const doc = document, 
         html = doc.documentElement,
@@ -56,6 +57,7 @@ function fullscreen() {
         cancelFullScreen.call(doc);
     }
 }
+*/
 
 Math.seed = 6;
 Math.rnd = function(max, min) {
