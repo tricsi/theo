@@ -13,8 +13,9 @@ function load() {
 }
 
 function update() {
-    requestAnimationFrame(update);
     game.update();
+    game.render();
+    requestAnimationFrame(update);
 }
 
 on(ctx.canvas, "mousedown", (e) => {
