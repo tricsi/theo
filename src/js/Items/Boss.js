@@ -6,15 +6,14 @@ class Boss extends Item {
         this.speed = new Vec();
         this.velociy = 1;
         this.frame = 0;
-        this.sfx = new Sfx([1,0.17,0.19,0.41,0.38,0.14,,0.001,0.001,,0.96,0.77,0.31,,0.077,0.66,0.5,0.64,0.99,0.04,0.38,0.05,0.0006,0.4]);
     }
 
     start() {
-        this.src = this.sfx.play(true);
+        this.sfx = Sfx.play("boss", true);
     }
 
     stop() {
-        this.src.stop();
+        this.sfx.stop();
     }
 
     update(hero, room) {

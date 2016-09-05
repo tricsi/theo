@@ -5,7 +5,6 @@ class Door extends Item {
         this.key = key || false;
         this.open = key ? false : true;
         this.size = 12;
-        this.sfxKey = new Sfx([0,,0.0354,,0.4903,0.4187,,0.3668,,,,,,0.5161,,0.4372,,,1,,,,,0.5]);
     }
 
     render(draw) {
@@ -22,7 +21,7 @@ class Door extends Item {
         if (!this.key) {
             result = hero.pos.clone().sub(this.pos).mag() < hero.size;
         } else if (hero.pos.clone().sub(this.key).mag() < hero.size + this.size) {
-            this.sfxKey.play();
+            Sfx.play("key");
             this.key = false;
         }
         if (result) {

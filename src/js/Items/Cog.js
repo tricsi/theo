@@ -6,15 +6,14 @@ class Cog extends Item {
         this.size = 16;
         this.speed = 1;
         this.frame = 0;
-        this.sfx = new Sfx([0,,0.39,,,0.27,,,,0.53,0.72,,-0.8234,-0.0142,-0.0921,,,,1,,-0.0417,,,0.3]);
     }
 
     start() {
-        this.src = this.sfx.play(true);
+        this.sfx = Sfx.play("cog", true);
     }
 
     stop() {
-        this.src.stop();
+        this.sfx.stop();
     }
 
     pre(draw) {

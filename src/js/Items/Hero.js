@@ -10,8 +10,6 @@ class Hero extends Item {
         this.maxSpeed = new Vec(3, 5);
         this.velocity = new Vec(.1, .15);
         this.jumpSpeed = new Vec(3, -5);
-        this.sfxJump = new Sfx([0,,0.123,,0.2154,0.301,,0.2397,,,,,,0.4311,,,,,1,,,0.1789,,0.46]);
-        this.sfxSlide = new Sfx([3,0.52,1,,1,1,1,0.6599,,,,-1,,,,,,,0.44,,,0.66,0.5,0.3]);
         this.collide = new Vec();
     }
 
@@ -42,8 +40,8 @@ class Hero extends Item {
         collide.y = room.collide(pos, size, true);
         pos.y += speed.y;
         collide.x = room.collide(pos, size, true);
-        if (!this.srcSlide && speed.y > 0 && collide.x != collide.y) {
-            this.srcSlide = this.sfxSlide.play(true);
+        if (!this.sfx && speed.y > 0 && collide.x != collide.y) {
+            this.sfx = Sfx.play("slide", true);
         } else if (collide.x == collide.y) {
             this.stop();
         }
@@ -62,9 +60,9 @@ class Hero extends Item {
     }
 
     stop() {
-        if (this.srcSlide) {
-            this.srcSlide.stop();
-            this.srcSlide = false;
+        if (this.sfx) {
+            this.sfx.stop();
+            this.sfx = false;
         }
     }
 
@@ -81,7 +79,7 @@ class Hero extends Item {
             if (collide.y && !collide.x) {
                 this.turn();
             }
-            this.sfxJump.play();
+            Sfx.play("jump");
             if (this.srcSlide) {
                 this.srcSlide.stop();
             }

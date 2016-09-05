@@ -1,25 +1,30 @@
 class Sfx {
     
-    constructor(config) {
+    static add(name, config) {
         const data = jsfxr(config);
         if (!Sfx.ctx) {
             Sfx.ctx = new AudioContext();
+            Sfx.buffer = {};
             Sfx.master = Sfx.ctx.createGain();
             Sfx.master.connect(Sfx.ctx.destination);
         }
-        this.mixer = Sfx.ctx.createGain();
-        this.mixer.connect(Sfx.master);
         Sfx.ctx.decodeAudioData(data, (buffer) => {
-            this.buffer = buffer;
+            Sfx.buffer[name] = buffer;
         });
+        return Sfx;
     }
 
-    play(loop) {
+    static play(name, loop) {
+        if (!Sfx.buffer[name]) {
+            return;
+        }
         let source = Sfx.ctx.createBufferSource();
+        source.mixer = Sfx.ctx.createGain();
+        source.mixer.connect(Sfx.master);
         source.loop = loop || false;
-        source.buffer = this.buffer;
-        source.connect(this.mixer);
-        source.start(0);
+        source.buffer = Sfx.buffer[name];
+        source.connect(source.mixer);
+        source.start(Sfx.ctx.currentTime);
         return source;
     }
 
