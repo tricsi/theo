@@ -7,8 +7,8 @@ class Sfx {
             Sfx.master = Sfx.ctx.createGain();
             Sfx.master.connect(Sfx.ctx.destination);
         }
-        this.volme = Sfx.ctx.createGain();
-        this.volme.connect(Sfx.master);
+        this.mixer = Sfx.ctx.createGain();
+        this.mixer.connect(Sfx.master);
         Sfx.ctx.decodeAudioData(data, (buffer) => {
             this.buffer = buffer;
         });
@@ -18,7 +18,7 @@ class Sfx {
         let source = Sfx.ctx.createBufferSource();
         source.loop = loop || false;
         source.buffer = this.buffer;
-        source.connect(this.volme);
+        source.connect(this.mixer);
         source.start(0);
         return source;
     }

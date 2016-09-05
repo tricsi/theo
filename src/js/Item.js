@@ -6,8 +6,12 @@ class Item {
 
     pre(draw) {}
 
-    render(draw) {}
+    start() {}
+
+    stop() {}
 
     update(hero) {}
 
+    render(draw) {}
+    
 }

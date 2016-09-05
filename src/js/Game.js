@@ -92,7 +92,7 @@ class Game {
         if (scene.won) {
             this.next();
         } else if (!scene.run) {
-            scene.run = true;
+            scene.start();
         } else if (hero.alive) {
             hero.jump();    
         } else {

@@ -6,6 +6,15 @@ class Cog extends Item {
         this.size = 16;
         this.speed = 1;
         this.frame = 0;
+        this.sfx = new Sfx([0,,0.39,,,0.27,,,,0.53,0.72,,-0.8234,-0.0142,-0.0921,,,,1,,-0.0417,,,0.3]);
+    }
+
+    start() {
+        this.src = this.sfx.play(true);
+    }
+
+    stop() {
+        this.src.stop();
     }
 
     pre(draw) {
@@ -18,6 +27,7 @@ class Cog extends Item {
                 .end();
         }
     }
+
 
     render(draw) {
         const pos = this.pos.clone().sub(this.size);
@@ -34,13 +44,17 @@ class Cog extends Item {
             speed = this.speed;
         if (line) {
             pos.add(line.vec.clone().multiply(speed));
-            let dist = pos.clone().sub(line.end).mag();
-            if (dist < speed) {
+            let lineDist = pos.clone().sub(line.end).mag();
+            if (lineDist < speed) {
                 pos = line.end.clone();
                 this.line = new Line(line.end, line.begin);
             }
         }
-        if (hero.pos.clone().sub(pos).mag() < this.size + hero.size) {
+        
+        let dist = hero.pos.clone().sub(pos).mag(),
+            gain = 1 - dist / 150;
+        this.sfx.mixer.gain.value = gain > 0 ? gain : 0;
+        if (dist < this.size + hero.size) {
             hero.alive = false;
         }
         this.frame += .5;
