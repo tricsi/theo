@@ -1,4 +1,4 @@
-class Window extends Item {
+class Win extends Item {
 
     pre(draw) {
         let pos = this.pos,

@@ -81,7 +81,7 @@ class Game {
                 mobs.push(new Boss(this.pos(val)));
                 break;
             case "W":
-                mobs.push(new Window(this.pos(val)));
+                mobs.push(new Win(this.pos(val)));
                 break;
             case "#":
                 text.push(row.substr(1));

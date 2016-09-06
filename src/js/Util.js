@@ -1,38 +1,20 @@
-/**
- * Query selector helper
- * @param {string} query
- * @param {Object} element
- */
 function $(query, element) {
     element = element || document;
     return element.querySelector(query);
 }
 
-/**
- * Create element helper
- * @param {string} name
- * @param {boolean} isText
- * @returns {DOMElement}
- */
 function em(value, isText) {
     return isText
         ? document.createTextNode(value)
         : document.createElement(value);
 }
 
-/**
- * Event handler helper
- * @param {Object} element
- * @param {string} event
- * @callback handler
- */
 function on(element, event, handler) {
     event.split(",").forEach((name) => {
         element.addEventListener(name.trim(), handler, false);
     });
 }
 
-/*
 function fullscreen() {
     const doc = document, 
         html = doc.documentElement,
@@ -57,7 +39,6 @@ function fullscreen() {
         cancelFullScreen.call(doc);
     }
 }
-*/
 
 Math.seed = 6;
 Math.rnd = function(max, min) {

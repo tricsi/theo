@@ -7,9 +7,8 @@ let gulp = require("gulp"),
     concat = require("gulp-concat"),
     insert = require("gulp-insert"),
     server = require("gulp-express"),
-    minifier = require("gulp-uglify/minifier"),
-    uglifyjs = require("uglify-js-harmony"),
-    sourcemaps = require('gulp-sourcemaps'),
+    closure = require("google-closure-compiler").gulp(),
+    sourcemaps = require("gulp-sourcemaps"),
     pump = require("pump"),
     del = require("del");
 
@@ -32,38 +31,38 @@ gulp.task("sass", ["clean"], function () {
         .pipe(gulp.dest("dist"));
 });
 
-gulp.task("uglify", ["clean"], function (cb) {
-    pump([
-        gulp.src(["src/jsfxr.js", "src/js/**/*.js", "src/script.js"]),
-        concat("script.js"),
-        insert.transform(function(contents, file) {
-            return `"use strict";\nonload = function () {\n${contents}};`;
-        }),
-        sourcemaps.init(),
-        minifier({mangle: true}, uglifyjs),
-        sourcemaps.write("."),
-        gulp.dest("dist")
-    ], cb);
+gulp.task("closure", ["clean"], function () {
+    return gulp.src(["src/jsfxr.js", "src/js/**/*.js", "src/script.js"])
+        .pipe(sourcemaps.init())
+        .pipe(closure({
+            compilation_level: "SIMPLE",
+            language_in: "ECMASCRIPT6_STRICT",
+            language_out: "ECMASCRIPT5_STRICT",
+            output_wrapper: "onload=function(){\n%output%\n};",
+            js_output_file: "script.js"
+        }))
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("dist"));
 });
 
-gulp.task("editor", ["clean"], function (cb) {
-    pump([
-        gulp.src(["src/jsfxr.js", "src/js/**/*.js", "src/editor.js"]),
-        concat("editor.js"),
-        insert.transform(function(contents, file) {
-            return `"use strict";\nonload = function () {\n${contents}};`;
-        }),
-        sourcemaps.init(),
-        minifier({mangle: true}, uglifyjs),
-        sourcemaps.write("."),
-        gulp.dest("dist")
-    ], cb);
+gulp.task("editor", ["clean"], function () {
+    return gulp.src(["src/jsfxr.js", "src/js/**/*.js", "src/editor.js"])
+        .pipe(sourcemaps.init())
+        .pipe(closure({
+            compilation_level: "SIMPLE",
+            language_in: "ECMASCRIPT6_STRICT",
+            language_out: "ECMASCRIPT5_STRICT",
+            output_wrapper: "onload=function(){\n%output%\n};",
+            js_output_file: "editor.js"
+        }))
+        .pipe(sourcemaps.write("."))
+        .pipe(gulp.dest("dist"));
 });
 
-gulp.task("zip", ["clean", "sass", "uglify", "copy"], function () {
+gulp.task("zip", ["clean", "sass", "closure", "copy"], function () {
     return gulp.src(["dist/index.html", "dist/script.js", "dist/style.css"])
         .pipe(zip("dist.zip"))
-        .pipe(size({title: "Build", pretty: false}))
+        .pipe(size({ title: "Build", pretty: false }))
         .pipe(gulp.dest("."));
 });
 
@@ -76,4 +75,4 @@ gulp.task("watch", ["server"], function () {
     gulp.watch("src/**/*.*", ["server"]);
 });
 
-gulp.task("default", ["clean", "sass", "uglify", "editor", "copy", "zip"]);
+gulp.task("default", ["clean", "sass", "closure", "editor", "copy", "zip"]);

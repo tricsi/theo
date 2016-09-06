@@ -181,7 +181,7 @@ class Draw {
             line = 14,
             width = 0,
             height = 0;
-        if (!value instanceof Array) {
+        if (!(value instanceof Array)) {
             value = [value];
         }
         value.forEach((row) => {
