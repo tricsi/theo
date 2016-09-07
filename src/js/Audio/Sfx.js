@@ -3,8 +3,9 @@ class Sfx {
     static add(name, config) {
         const data = jsfxr(config);
         if (!Sfx.ctx) {
-            window.AudioContext = window.AudioContext || window.webkitAudioContext;
-            Sfx.ctx = new AudioContext();
+            Sfx.ctx = window.AudioContext
+                ? new AudioContext()
+                : new webkitAudioContext();
             Sfx.buffer = {};
             Sfx.master = Sfx.ctx.createGain();
             Sfx.master.connect(Sfx.ctx.destination);

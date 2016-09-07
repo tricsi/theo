@@ -29,10 +29,14 @@ class Camera {
             canvas = out.canvas,
             w = canvas.width,
             h = canvas.height,
+            sw = ctx.canvas.width,
+            sh = ctx.canvas.width,
             sx = Math.round(this.pos.x) - Math.round(w / 2),
             sy = Math.round(this.pos.y) - Math.round(h / 2),
             dx = 0,
             dy = 0;
+        out.fillStyle = this.sky;
+        out.fillRect(0, 0, w, h);
         if (sx < 0) {
             dx = -sx;
             sx = 0;
@@ -41,9 +45,15 @@ class Camera {
             dy = -sy;
             sy = 0;
         }
-        out.fillStyle = this.sky;
-        out.fillRect(0, 0, w, h);
-        out.drawImage(ctx.canvas, sx, sy, w, h, dx, dy, w, h);
+        if (sx + w > sw) {
+            w = sw - sx;
+        }
+        if (sy + h > sh) {
+            h = sh - sy;
+        }
+        if (w > 0 && h > 0) {
+            out.drawImage(ctx.canvas, sx, sy, w, h, dx, dy, w, h);
+        }
     }
 
 }
