@@ -5,7 +5,7 @@ class Hero extends Item {
         this.size = 12;
         this.bound = bound;
         this.alive = true;
-        this.speed = new Vec(.1);
+        this.speed = new Vec();
         this.minSpeed = new Vec();
         this.maxSpeed = new Vec(3, 5);
         this.velocity = new Vec(.1, .15);

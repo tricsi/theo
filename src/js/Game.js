@@ -1,11 +1,13 @@
 class Game {
 
     constructor(draw, config) {
+        let match = location.search.match(/^\?(\d+)$/),
+            store = localStorage.getItem("teos") || 0;
+        this.index = parseInt(match ? match[1] : store);
         this.draw = draw;
         this.cfg = config;
         this.grid = 72;
         this.margin = 40;
-        this.index = 0;
         Sfx.add("key", [0,,0.0354,,0.4903,0.4187,,0.3668,,,,,,0.5161,,0.4372,,,1,,,,,0.5])
             .add("slide", [3,0.52,1,,1,1,1,0.6599,,,,-1,,,,,,,0.44,,,0.66,0.5,0.3])
             .add("jump", [0,,0.123,,0.2154,0.301,,0.2397,,,,,,0.4311,,,,,1,,,0.1789,,0.46])
@@ -37,19 +39,19 @@ class Game {
     }
 
     next() {
-        let index = this.index + 1;
-        if (index >= this.cfg.length) {
-            index = 0;
+        if (++this.index >= this.cfg.length) {
+            this.index = 0;
         }
-        this.load(index);
+        this.load();
     }
 
-    load(index) {
+    load() {
         let hero,
             door,
             room = new Room(this.grid, this.margin),
             mobs = [],
             text = [],
+            index = this.index,
             rows = this.cfg[index].split("|"),
             canvas = this.draw.ctx.canvas;
         rows.forEach((row) => {
@@ -89,8 +91,8 @@ class Game {
             }
         });
         Math.seed = index;
-        this.index = index;
         this.scene = new Scene(hero, room, door, mobs, text);
+        localStorage.setItem("teos", index);
     }
 
     tap() {
@@ -103,7 +105,7 @@ class Game {
         } else if (hero.alive) {
             hero.jump();    
         } else {
-            this.load(this.index);
+            this.load();
         }
     }
 

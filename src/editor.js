@@ -8,7 +8,8 @@ function load() {
     let config = code.value.trim().replace(/[\r\n]+/gm, "|");
     $("#config").value = config;
     game.cfg[0] = config;
-    game.load(0);
+    game.index = 0;
+    game.load();
     localStorage.setItem("editor", config);
 }
 
