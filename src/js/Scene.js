@@ -6,7 +6,7 @@ class Scene {
         this.exit = exit;
         this.mobs = mobs || [];
         this.text = text || [];
-        this.run = false;
+        this.run = 0;
         this.won = false;
         this.img = false;
     }
@@ -27,19 +27,20 @@ class Scene {
         if (!this.run && this.text.length > 0) {
             draw.begin()
                 .to(this.hero.pos.clone().add(-16, -22))
-                .text(this.text, 0, 5)
+                .text(this.text, 0, 5, 1)
                 .end();
         }
     }
 
     start() {
-        this.run = true;
+        this.run = new Date().getTime();
         this.hero.start();
         this.exit.start();
         this.mobs.forEach((mob) => mob.start());
     }
 
     stop() {
+        this.run = new Date().getTime() - this.run;
         this.hero.stop();
         this.exit.stop();
         this.mobs.forEach((mob) => mob.stop());

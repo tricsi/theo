@@ -1,9 +1,9 @@
 class Game {
 
     constructor(draw, config) {
-        let match = location.search.match(/^\?(\d+)$/),
-            store = localStorage.getItem("teos") || 0;
-        this.index = parseInt(match ? match[1] : store);
+        let match = location.search.match(/^\?(\d+)$/);
+        this.store = JSON.parse(localStorage.getItem("theos") || "{\"time\": 0,\"index\":0}");
+        this.index = parseInt(match ? match[1] : store.index);
         this.draw = draw;
         this.cfg = config;
         this.grid = 72;
@@ -39,10 +39,16 @@ class Game {
     }
 
     next() {
+        let store = this.store,
+            scene = this.scene;
+        store.time += scene.run;
         if (++this.index >= this.cfg.length) {
             this.index = 0;
+            store.time = 0;
         }
         this.load();
+        store.index = this.index;
+        localStorage.setItem("theos", JSON.stringify(store));
     }
 
     load() {
@@ -89,7 +95,7 @@ class Game {
                 mobs.push(new Win(this.pos(val)));
                 break;
             case "X":
-                door = new Gate(this.pos(val));
+                door = new Gate(this.pos(val), this.store.time);
                 break;
             case "#":
                 text.push(row.substr(1));
@@ -98,7 +104,6 @@ class Game {
         });
         Math.seed = index;
         this.scene = new Scene(hero, room, door, mobs, text);
-        localStorage.setItem("teos", index);
     }
 
     tap() {

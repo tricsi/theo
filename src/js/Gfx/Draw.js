@@ -177,7 +177,7 @@ class Draw {
         return img;
     }
 
-    text(value, color, back) {
+    text(value, color, back, say) {
         let ctx = this.ctx,
             line = 14,
             width = 0,
@@ -192,11 +192,13 @@ class Draw {
             }
         });
         height = line * value.length;
-        this.begin()
-            .ngon(3, 5)
-            .fill(back)
-            .to(-15, -7-height)
-            .rect(width + 10, height + 6, back);
+        this.begin();
+        if (say) {
+            this.ngon(3, 5)
+                .fill(back)
+                .to(-15, -7-height);
+        }
+        this.rect(width + 10, height + 6, back);
         ctx.fillStyle = this.color(color);
         for (let i = 0; i < value.length; i++) {
             ctx.fillText(value[i], 5, i * line + 14);

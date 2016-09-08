@@ -4,7 +4,7 @@ class Rod extends Item {
         let pos = this.pos.clone().sub(12);
         draw.begin()
             .to(pos.x, pos.y - 10)
-            .text(["Skipping classes", "again, Theodor?"], 0, 5)
+            .text(["Skipping classes", "again, Theodor?"], 0, 5, 1)
             .end();
     }
 
