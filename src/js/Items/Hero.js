@@ -68,8 +68,7 @@ class Hero extends Item {
 
     turn() {
         this.velocity.x = -this.velocity.x;
-        this.speed.x = this.velocity.x < 0 ? -this.jumpSpeed.x : this.jumpSpeed.x;
-
+        this.speed.x = -this.speed.x;
     }
 
     jump() {

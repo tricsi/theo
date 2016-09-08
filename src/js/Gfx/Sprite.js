@@ -22,6 +22,10 @@ class Sprite {
         this.hero(0, 0, true);
         draw.end();
 
+        draw.begin().to(168, 0);
+        this.rod(0, 0, true);
+        draw.end();
+
         draw.to(0, 72);
         for (let a=0; a<3; a++) {
             draw.begin().to(a * 32, 0);
@@ -178,6 +182,22 @@ class Sprite {
             .to(x, y)
             .ellipse(2)
             .fill(0)
+            .end();
+    }
+
+    rod() {
+        this.draw
+            .begin()
+            .to(4, 0)
+            .rect(16, 48, 0)
+            .to(1, 1)
+            .rect(14, 46, 3)
+            .to(2, 10)
+            .rect(10, 10, 1)
+            .to(3, 3)
+            .rect(4, 4, 0)
+            .to(0, 16)
+            .rect(4, 1, 0)
             .end();
     }
 }

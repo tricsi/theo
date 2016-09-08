@@ -7,7 +7,8 @@ class Draw {
             "#fff",                    // 1 = white
             "#666",                    // 2 = dark grey
             "#999",                    // 3 = grey
-            "#ccc"                     // 4 = light gray
+            "#ccc",                    // 4 = light gray
+            "rgba(192,192,192,.9)"
         ];
         ctx.font = "13px sans-serif";
     }
@@ -194,7 +195,7 @@ class Draw {
         this.begin()
             .ngon(3, 5)
             .fill(back)
-            .to(-10, -7-height)
+            .to(-15, -7-height)
             .rect(width + 10, height + 6, back);
         ctx.fillStyle = this.color(color);
         for (let i = 0; i < value.length; i++) {

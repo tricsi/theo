@@ -19,8 +19,8 @@ class Door extends Item {
     update(hero) {
         let result = false;
         if (!this.key) {
-            result = hero.pos.clone().sub(this.pos).mag() < hero.size;
-        } else if (hero.pos.clone().sub(this.key).mag() < hero.size + this.size) {
+            result = hero.pos.clone().sub(this.pos).mag() < this.size;
+        } else if (hero.pos.clone().sub(this.key).mag() < this.size) {
             Sfx.play("key");
             this.key = false;
         }

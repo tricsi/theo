@@ -15,18 +15,19 @@ class Scene {
         draw.clear();
         if (!this.img) {
             this.room.pre(draw);
+            this.exit.pre(draw);
             this.mobs.forEach((mob) => mob.pre(draw));
             this.img = draw.merge();
         } else {
             draw.img(this.img);
         }
         this.exit.render(draw);
-        this.hero.render(draw);
         this.mobs.forEach((mob) => mob.render(draw));
+        this.hero.render(draw);
         if (!this.run && this.text.length > 0) {
             draw.begin()
                 .to(this.hero.pos.clone().add(-16, -22))
-                .text(this.text, 0, 4)
+                .text(this.text, 0, 5)
                 .end();
         }
     }
