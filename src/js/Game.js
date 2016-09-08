@@ -3,7 +3,7 @@ class Game {
     constructor(draw, config) {
         let match = location.search.match(/^\?(\d+)$/);
         this.store = JSON.parse(localStorage.getItem("theos") || "{\"time\": 0,\"index\":0}");
-        this.index = parseInt(match ? match[1] : store.index);
+        this.index = parseInt(match ? match[1] : this.store.index);
         this.draw = draw;
         this.cfg = config;
         this.grid = 72;
