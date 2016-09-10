@@ -47,6 +47,11 @@ on(window, "resize", () => {
     game.cam.resize();
 });
 
+new Icon($("#icon").getContext("2d")).render(function() {
+    $("link[rel=apple-touch-icon]").href = this.src;
+    $("link[rel=icon]").href = this.src;
+});
+
 new Sprite(game.draw).render(() => {
     game.load();
     update();
