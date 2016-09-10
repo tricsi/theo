@@ -1,9 +1,9 @@
-let ctx = $("#game").getContext("2d"),
-    cam = new Camera($("#cam").getContext("2d"), 300, "#420"),
-    draw = new Draw(ctx),
-    game = new Game(draw, [
+const game = new Game(
+    new Draw($("#game").getContext("2d")),
+    new Camera($("#cam").getContext("2d"), 300, "#420"),
+    [
         "M3,7,7,6,3|H4,6|D5,6|W6,6|#The door is open.|#I have to escape!",
-        "M4,8,6,3,8,2,2,3,4|H4,7|D7,2|#I can jump up walls!",
+        "M4,8,6,3,8,1,2,3,4|H4,7|D7,2|#I can jump up walls!",
         "M0,0,10,10,0|M1,1,9,9,1,3,7,7,3,5,4,6,6,4,2,8,8,2,1|H1,0|D2,0,5,5|#The door is locked.|#I need a key!",
         "M0,10,10,0,0|M2,9,6,2,8,1,4,8,2|G7,11|H0,9|D7,0,3,7|#This wall has no texture!|#Is it a glitch?",
         "M0,0,10,10,0|M2,2,4,6,6,2,8,8,2|H4,9,1|D2,9,3.8,5|B6,9|#Uh-oh! The Sentinel.|#Can't jump through him.",
@@ -22,13 +22,12 @@ let ctx = $("#game").getContext("2d"),
         "M0,0,3,2,4,0,5,1,6,0,9,2,10,3,9,5,10,6,9,8,10,9,9,10,6,8,5,10,4,9,3,10,0|M1,1,2,3,1|M1,4,2,6,1|M1,7,2,9,1|M3,3,4,5,3|M3,6,4,8,3|M5,2,6,4,5|M5,5,6,7,5|M7,1,8,3,7|M7,4,8,6,7|M7,7,8,9,7|H1,9|D5,4,7,0|C2,1.7,4,1.7|C6,5.7,8,5.7|#Jump around the Gym|#and I'll be at the Gates.",
         "M0,10,4,9,2,1,8,2,3,3,8,4,3,7,8,6,4,5,9,10,10,0,0|G5,9|H2,0|D7,6,3,9|C4,0,5,0|E5,6|B0,0|W6,6|#Final test. Tough,|#but I'm almost out.",
         "M2,4,8,6,2|H4,5|X5,5|R3,5|#Hello Mr Rodman."
-    ]);
+    ]
+);
 
 function update() {
     game.update(); 
     game.render();
-    cam.pos = game.scene.hero.pos;
-    cam.render(ctx);
     requestAnimationFrame(update);
 }
 
@@ -45,10 +44,10 @@ on(document, "keydown", (e) => {
 });
 
 on(window, "resize", () => {
-    cam.resize();
+    game.cam.resize();
 });
 
-new Sprite(draw).render(() => {
+new Sprite(game.draw).render(() => {
     game.load();
     update();
 });

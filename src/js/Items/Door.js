@@ -8,10 +8,10 @@ class Door extends Item {
     }
 
     render(draw) {
-        let pos = new Vec(-12, -21).add(this.pos);
-        draw.sprite(this.open ? 24 : 0, 104, 24, 32, pos.x, pos.y);
+        let pos = new Vec(-12, -16).add(this.pos);
+        draw.sprite(this.key ? 0 : 24, 104, 24, 32, pos.x, pos.y);
         if (this.key) {
-            let key = new Vec(-12, -21).add(this.key);
+            let key = new Vec(-12, -16).add(this.key);
             draw.sprite(48, 104, 24, 32, key.x, key.y);
         }
     }

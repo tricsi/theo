@@ -9,7 +9,9 @@ class Boss extends Item {
     }
 
     start() {
-        this.sfx = Sfx.play("boss", true);
+        const sfx = Sfx.play("boss", true);
+        sfx.mixer.gain.value = 0;
+        this.sfx = sfx;
     }
 
     stop() {

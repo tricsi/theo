@@ -6,9 +6,10 @@ class Scene {
         this.exit = exit;
         this.mobs = mobs || [];
         this.text = text || [];
-        this.run = 0;
         this.won = false;
         this.img = false;
+        this.started = 0;
+        this.stoped = 0;
     }
 
     render(draw) {
@@ -24,7 +25,7 @@ class Scene {
         this.exit.render(draw);
         this.mobs.forEach((mob) => mob.render(draw));
         this.hero.render(draw);
-        if (!this.run && this.text.length > 0) {
+        if (!this.started && this.text.length > 0) {
             draw.begin()
                 .to(this.hero.pos.clone().add(-16, -22))
                 .text(this.text, 0, 5, 1)
@@ -33,14 +34,14 @@ class Scene {
     }
 
     start() {
-        this.run = new Date().getTime();
+        this.started = Date.now();
         this.hero.start();
         this.exit.start();
         this.mobs.forEach((mob) => mob.start());
     }
 
     stop() {
-        this.run = new Date().getTime() - this.run;
+        this.stoped = Date.now();
         this.hero.stop();
         this.exit.stop();
         this.mobs.forEach((mob) => mob.stop());
@@ -50,7 +51,7 @@ class Scene {
         let hero = this.hero,
             room = this.room,
             exit = this.exit;
-        if (!this.run || !hero.alive || this.won) {
+        if (this.stoped || !this.started) {
             return;
         }
         hero.update(room);

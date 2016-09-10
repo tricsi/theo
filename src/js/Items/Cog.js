@@ -9,7 +9,9 @@ class Cog extends Item {
     }
 
     start() {
-        this.sfx = Sfx.play("cog", true);
+        const sfx = Sfx.play("cog", true);
+        sfx.mixer.gain.value = 0;
+        this.sfx = sfx;
     }
 
     stop() {

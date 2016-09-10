@@ -1,28 +1,54 @@
 class Game {
 
-    constructor(draw, config) {
+    constructor(draw, cam, config) {
         let match = location.search.match(/^\?(\d+)$/);
         this.store = JSON.parse(localStorage.getItem("theos") || "{\"time\": 0,\"index\":0}");
         this.index = parseInt(match ? match[1] : this.store.index);
         this.draw = draw;
+        this.cam = cam;
         this.cfg = config;
         this.grid = 72;
         this.margin = 40;
-        Sfx.add("key", [0,,0.0354,,0.4903,0.4187,,0.3668,,,,,,0.5161,,0.4372,,,1,,,,,0.5])
+        Sfx.add("key", [0,,0.035,,0.49,0.17,,0.37,,,,,,0.52,,0.44,,,1,,,,,0.5])
             .add("slide", [3,0.52,1,,1,1,1,0.6599,,,,-1,,,,,,,0.44,,,0.66,0.5,0.4])
-            .add("jump", [0,,0.123,,0.2154,0.301,,0.2397,,,,,,0.4311,,,,,1,,,0.1789,,0.46])
+            .add("jump", [2,,0.16,,0.18,0.27,,0.21,,,,,,0.22,,,,,0.74,,,,,0.5])
             .add("won", [2,0.005,0.18,0.13,0.44,0.51,,0.35,0.19,0.02,0.81,-0.8,0.89,0.44,,0.49,-0.78,-0.46,0.99,,-0.045,0.012,0.004,0.35])
-            .add("lose", [1,0.003,0.03,0.02,0.87,0.25,,0.016,-0.16,,0.08,-0.36,0.067,,0.75,0.04,-0.75,0.001,0.73,-0.016,0.89,0.24,-0.19,0.5])
+            .add("lose", [1,0.003,0.03,0.02,0.87,0.22,,0.016,-0.16,,0.08,-0.36,0.067,,0.75,0.04,-0.75,0.001,0.73,-0.016,0.89,0.24,-0.19,0.5])
             .add("boss", [1,0.17,0.19,0.41,0.38,0.14,,0.001,0.001,,0.96,0.77,0.31,,0.077,0.66,0.5,0.64,0.99,0.04,0.38,0.05,0.0006,0.4])
             .add("cog", [0,,0.39,,,0.27,,,,0.53,0.72,,-0.8234,-0.0142,-0.0921,,,,1,,-0.0417,,,0.3]);
     }
 
     update() {
-        this.scene.update();
+        const scene = this.scene;
+        const cam = this.cam;
+        let size = 300;
+        scene.update();
+        if (scene.stoped) {
+            let time = Date.now() - scene.stoped;
+            if (time > 1000) {
+                if (scene.won) {
+                    this.next();
+                } else {
+                    this.load();
+                }
+            } else {
+                size -= time / 20;
+            }
+        }
+        if (cam.size != size) {
+            cam.size = size;
+            cam.resize();
+        }
     }
 
     render() {
-        this.scene.render(this.draw);
+        const scene = this.scene;
+        const hero = scene.hero;
+        const draw = this.draw;
+        const cam = this.cam;
+        scene.render(draw);
+        cam.pos.add(hero.pos.clone().sub(cam.pos).div(3));
+        cam.render(draw.ctx);
     }
 
     pos(values, y, x) {
@@ -41,7 +67,7 @@ class Game {
     next() {
         let store = this.store,
             scene = this.scene;
-        store.time += scene.run;
+        store.time += scene.stoped - scene.started;
         if (++this.index >= this.cfg.length) {
             this.index = 0;
             store.time = 0;
@@ -77,7 +103,7 @@ class Game {
                 room.glitch = val;
                 break;
             case "D":
-                door = new Door(this.pos(val, 60), this.pos(val, 60));
+                door = new Door(this.pos(val, 56), this.pos(val, 56));
                 break;
             case "C":
                 mobs.push(new Cog(this.pos(val, 56), this.pos(val, 56)));
@@ -104,19 +130,16 @@ class Game {
         });
         Math.seed = index;
         this.scene = new Scene(hero, room, door, mobs, text);
+        this.cam.pos = hero.pos.clone();
     }
 
     tap() {
         let scene = this.scene,
             hero = scene.hero;
-        if (scene.won) {
-            this.next();
-        } else if (!scene.run) {
+        if (!scene.started) {
             scene.start();
-        } else if (hero.alive) {
+        } else if (!scene.stoped) {
             hero.jump();    
-        } else {
-            this.load();
         }
     }
 
