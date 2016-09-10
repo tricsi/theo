@@ -1,5 +1,11 @@
+/**
+ * Window
+ */
 class Win extends Item {
 
+    /**
+     * @param {Draw} draw
+     */
     pre(draw) {
         const pos = this.pos;
         const sky = draw.glin("#09c", "#cff", 0, 0, 0, 24);

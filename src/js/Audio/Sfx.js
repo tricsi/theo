@@ -1,5 +1,12 @@
+/**
+ * Sound FX module
+ */
 class Sfx {
-    
+
+    /**
+     * @param {String} name
+     * @param {Array} config
+     */
     static add(name, config) {
         const data = jsfxr(config);
         if (!Sfx.ctx) {
@@ -16,11 +23,15 @@ class Sfx {
         return Sfx;
     }
 
+    /**
+     * @param {String} name
+     * @param {Boolean} loop
+     */
     static play(name, loop) {
         if (!Sfx.buffer[name]) {
             return;
         }
-        let source = Sfx.ctx.createBufferSource();
+        const source = Sfx.ctx.createBufferSource();
         source.mixer = Sfx.ctx.createGain();
         source.mixer.connect(Sfx.master);
         source.loop = loop || false;

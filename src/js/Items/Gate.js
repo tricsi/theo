@@ -1,11 +1,21 @@
+/**
+ * The Gate
+ */
 class Gate extends Door {
 
+    /**
+     * @param {Vec} pos
+     * @param {Number} time
+     */
     constructor(pos, time) {
         super(pos);
         this.size = 32;
         this.time = time;
     }
 
+    /**
+     * @param {Draw} draw
+     */
     pre(draw) {
         const pos = this.pos.clone().sub(36, 28);
         const sky = draw.glin("#09c", "#cff", 0, 0, 0, 64);
@@ -29,6 +39,9 @@ class Gate extends Door {
             .end();
     }
 
+    /**
+     * @param {Draw} draw
+     */
     render(draw) {}
 
 }

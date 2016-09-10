@@ -1,21 +1,34 @@
+/**
+ * DOM query selector
+ * @param {String} query
+ * @param {DOMElement} element
+ * @returns {DOMElement}
+ */
 function $(query, element) {
     element = element || document;
     return element.querySelector(query);
 }
 
-function em(value, isText) {
-    return isText
-        ? document.createTextNode(value)
-        : document.createElement(value);
-}
-
+/**
+ * Attach event listener
+ * @param {DOMElement} element
+ * @param {String} event
+ * @param {Function} handler
+ */
 function on(element, event, handler) {
     event.split(",").forEach((name) => {
         element.addEventListener(name.trim(), handler, false);
     });
 }
 
+/**
+ * Random seed
+ */
 Math.seed = 6;
+
+/**
+ * Seed random number generator
+ */
 Math.rnd = function(max, min) {
     max = max || 1;
     min = min || 0;

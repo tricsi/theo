@@ -1,5 +1,12 @@
+/**
+ * The room
+ */
 class Room {
 
+    /**
+     * @param {Number} grid
+     * @param {number} margin
+     */
     constructor(grid, margin) {
         this.grid = grid;
         this.margin = margin;
@@ -8,6 +15,10 @@ class Room {
         this.glitch = [];
     }
 
+    /**
+     * Add walls 
+     * @param {Number[]} data
+     */
     map(data) {
         const grid = this.grid;
         const margin = this.margin;
@@ -31,6 +42,9 @@ class Room {
         this.dots.push(dots);
     }
 
+    /**
+     * @param {Draw} draw
+     */
     pre(draw) {
         const color = "rgba(0,0,0,.1)";
         let w = draw.ctx.canvas.width,
@@ -61,6 +75,12 @@ class Room {
         }
     }
 
+    /**
+     * Check wall collides
+     * @param {Vec} pos
+     * @param {Number} size
+     * @param {Boolean} glitch
+     */
     collide(pos, size, glitch) {
         let collide = 0;
         for (let i = 0; i < this.lines.length; i++) {

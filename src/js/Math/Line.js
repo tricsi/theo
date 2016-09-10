@@ -1,19 +1,23 @@
+/**
+ * Line math
+ */
 class Line {
 
+    /**
+     * @param {Vec} begin
+     * @param {Vec} end
+     */
     constructor(begin, end) {
         this.begin = begin;
         this.end = end;
         this.vec = end.clone().sub(begin).norm();
     }
 
-    vertical() {
-        return this.begin.x == this.end.x;
-    }
-
-    horizontal() {
-        return this.begin.y == this.end.y;
-    }
-
+    /**
+     * Dot projection
+     * @param {Vec} dot
+     * @returns {Vec}
+     */
     project(dot) {
         let param = -1;
         const a = dot.clone().sub(this.begin);

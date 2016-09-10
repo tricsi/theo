@@ -1,9 +1,18 @@
+/**
+ * Sprite generator class
+ */
 class Sprite {
 
+    /**
+     * @param {Draw} draw
+     */
     constructor(draw) {
         this.draw = draw;
     }
 
+    /**
+     * @param {Function} callback
+     */
     render(callback) {
         const draw = this.draw;
         draw.begin();
@@ -46,6 +55,9 @@ class Sprite {
         draw.end().merge(true, callback);
     }
 
+    /**
+     * Sentinel sprites
+     */
     boss(angle, eye) {
         let dark = "#339",
             light = "#66c";
@@ -80,10 +92,9 @@ class Sprite {
             .end();
     }
 
-    arms() {
-
-    }
-
+    /**
+     * Door and key sprites
+     */
     door() {
         let blue = "#669",
             dark = "#003";
@@ -130,9 +141,13 @@ class Sprite {
             .end();
     }
 
+    /**
+     * Cogs
+     * @param {Number} a
+     */
     cog(a) {
-        let draw = this.draw,
-            color = draw.grad("#ccc", "#666", 16);
+        const draw = this.draw;
+        const color = draw.grad("#ccc", "#666", 16);
         draw.begin()
             .to(16, 16)
             .rotate(a)
@@ -144,9 +159,15 @@ class Sprite {
             .end();
     }
 
+    /**
+     * Theodor
+     * @param {Number} x
+     * @param {Number} y
+     * @param {Boolean} dead
+     */
     hero(x, y, dead) {
-        let draw = this.draw,
-            color = draw.grad("#fc0", "#960", 12, -4, -4);
+        const draw = this.draw;
+        const color = draw.grad("#fc0", "#960", 12, -4, -4);
         draw.to(12, 12)
             .begin()
             .ellipse(11.3)
@@ -168,9 +189,14 @@ class Sprite {
         }
     }
 
+    /**
+     * The Infected Ones
+     * @param {Number} x
+     * @param {Number} y
+     */
     evil(x, y) {
-        let draw = this.draw,
-            color = draw.grad("#0c0", "#060", 12, -4, -4);
+        const draw = this.draw;
+        const color = draw.grad("#0c0", "#060", 12, -4, -4);
         draw.to(12, 12)
             .begin()
             .ngon(20, 11.5, 10)
@@ -185,6 +211,9 @@ class Sprite {
             .end();
     }
 
+    /**
+     * Mr Rodman
+     */
     rod() {
         this.draw
             .begin()

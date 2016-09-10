@@ -1,5 +1,11 @@
+/**
+ * The Sentinel
+ */
 class Boss extends Item {
 
+    /**
+     * @param {Vec} pos
+     */
     constructor(pos) {
         super(pos);
         this.size = 32;
@@ -18,6 +24,10 @@ class Boss extends Item {
         this.sfx.stop();
     }
 
+    /**
+     * @param {Hero} hero
+     * @param {Room} room
+     */
     update(hero, room) {
         this.speed = hero.pos.clone().sub(this.pos).bit().multiply(this.velociy);
         this.pos.x += this.speed.x;
@@ -33,6 +43,9 @@ class Boss extends Item {
         this.frame += .5;
     }
 
+    /**
+     * @param {Draw} draw
+     */
     render(draw) {
         const pos = this.pos.clone().sub(36);
         const frame = Math.round(this.frame) % 6;

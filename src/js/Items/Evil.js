@@ -1,5 +1,11 @@
+/**
+ * The Infected Ones
+ */
 class Evil extends Item {
 
+    /**
+     * @param {Vec} pos
+     */
     constructor(pos) {
         super(pos);
         this.size = 12;
@@ -8,6 +14,10 @@ class Evil extends Item {
         this.collide = new Vec();
     }
 
+    /**
+     * @param {Hero} hero
+     * @param {Room} room
+     */
     update(hero, room) {
         this.speed = hero.pos.clone().sub(this.pos).bit().multiply(this.velociy);
         this.pos.x += this.speed.x;
@@ -19,6 +29,9 @@ class Evil extends Item {
         }
     }
 
+    /**
+     * @param {Draw} draw
+     */
     render(draw) {
         const pos = this.pos.clone().sub(12);
         const vec = this.speed.clone().bit();

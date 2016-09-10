@@ -1,5 +1,13 @@
+/**
+ * Game class
+ */
 class Game {
 
+    /**
+     * @param {Draw} draw
+     * @param {String[]} config
+     * @param {Camera} cam
+     */
     constructor(draw, config, cam) {
         const match = location.search.match(/^\?(\d+)$/);
         this.store = JSON.parse(localStorage.getItem("theos") || "{\"time\": 0,\"index\":0}");
@@ -53,6 +61,13 @@ class Game {
         }
     }
 
+    /**
+     * Convert grid coordinated
+     * @param {Array} values
+     * @param {Number} x offset
+     * @param {Number} y offset
+     * @returns {Vec}
+     */
     pos(values, y, x) {
         if (values.length < 2) {
             return null;
@@ -66,6 +81,9 @@ class Game {
             .add(x, y);
     }
 
+    /**
+     * Step the scene index
+     */
     next() {
         const store = this.store;
         const scene = this.scene;
@@ -79,6 +97,9 @@ class Game {
         localStorage.setItem("theos", JSON.stringify(store));
     }
 
+    /**
+     * Load the actual scene
+     */
     load() {
         let hero,
             door,
@@ -137,6 +158,9 @@ class Game {
         }
     }
 
+    /**
+     * Input handler
+     */
     tap() {
         const scene = this.scene;
         if (!scene.started) {

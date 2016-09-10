@@ -1,5 +1,13 @@
+/**
+ * Camera renderer
+ */
 class Camera {
 
+    /**
+     * @param {CanvasRenderingContext2D} ctx
+     * @param {Number} size
+     * @param {String|CanvasGradient} sky
+     */
     constructor(ctx, size, sky) {
         this.ctx = ctx;
         this.sky = sky;
@@ -24,6 +32,9 @@ class Camera {
         }
     }
 
+    /**
+     * @param {CanvasRenderingContext2D} ctx
+     */
     render(ctx) {
         const out = this.ctx;
         const canvas = out.canvas;

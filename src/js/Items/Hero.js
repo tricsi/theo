@@ -1,5 +1,12 @@
+/**
+ * Theodor
+ */
 class Hero extends Item {
 
+    /**
+     * @param {Vec} pos
+     * @param {Vec} bound
+     */
     constructor(pos, bound) {
         super(pos);
         this.size = 12;
@@ -13,6 +20,9 @@ class Hero extends Item {
         this.collide = new Vec();
     }
 
+    /**
+     * @param {Draw} draw
+     */
     render(draw) {
         const pos = this.pos.clone().sub(12);
         let vec = new Vec(72, 0);
@@ -29,6 +39,9 @@ class Hero extends Item {
         draw.sprite(vec.x, vec.y, 24, 24, pos.x, pos.y);
     }
 
+    /**
+     * @param {Room} room
+     */
     update(room) {
         const pos = this.pos;
         const size = this.size;

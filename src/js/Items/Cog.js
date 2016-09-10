@@ -1,5 +1,12 @@
+/**
+ * Cogs
+ */
 class Cog extends Item {
 
+    /**
+     * @param {Vec} pos1 start
+     * @param {Vec} pos2 end
+     */
     constructor(pos1, pos2) {
         super(pos1.clone());
         this.line = pos2 ? new Line(pos1, pos2) : null;
@@ -18,6 +25,9 @@ class Cog extends Item {
         this.sfx.stop();
     }
 
+    /**
+     * @param {Draw} draw
+     */
     pre(draw) {
         const line = this.line;
         if (line) {
@@ -29,7 +39,9 @@ class Cog extends Item {
         }
     }
 
-
+    /**
+     * @param {Draw} draw
+     */
     render(draw) {
         const pos = this.pos.clone().sub(this.size);
         const frame = Math.round(this.frame) % 3;

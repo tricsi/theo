@@ -1,5 +1,15 @@
+/**
+ * Game scene class
+ */
 class Scene {
 
+    /**
+     * @param {Hero} hero
+     * @param {Room} room
+     * @param {Door} exit
+     * @param {Item[]} mobs
+     * @param {String[]} text
+     */
     constructor(hero, room, exit, mobs, text) {
         this.room = room;
         this.hero = hero;
@@ -12,6 +22,9 @@ class Scene {
         this.stoped = 0;
     }
 
+    /**
+     * @param {Draw} draw
+     */
     render(draw) {
         draw.clear();
         if (!this.img) {
