@@ -1,8 +1,8 @@
 class Win extends Item {
 
     pre(draw) {
-        let pos = this.pos,
-            sky = draw.glin("#09c", "#cff", 0, 0, 0, 24);
+        const pos = this.pos;
+        const sky = draw.glin("#09c", "#cff", 0, 0, 0, 24);
         draw.begin()
             .to(pos.x - 16, pos.y - 12)
             .rect(32, 24, sky)

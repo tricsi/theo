@@ -19,7 +19,7 @@ class Cog extends Item {
     }
 
     pre(draw) {
-        let line = this.line;
+        const line = this.line;
         if (line) {
             draw.begin()
                 .to(line.begin)

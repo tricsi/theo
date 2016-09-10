@@ -48,9 +48,9 @@ class Scene {
     }
 
     update() {
-        let hero = this.hero,
-            room = this.room,
-            exit = this.exit;
+        const hero = this.hero;
+        const room = this.room;
+        const exit = this.exit;
         if (this.stoped || !this.started) {
             return;
         }

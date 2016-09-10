@@ -7,11 +7,11 @@ class Gate extends Door {
     }
 
     pre(draw) {
-        let pos = this.pos.clone().sub(36, 28),
-            sky = draw.glin("#09c", "#cff", 0, 0, 0, 64),
-            min = Math.floor(this.time / 60000) + 100 + "",
-            sec = Math.floor(this.time / 1000) % 60 + 100 + "",
-            time = min.substr(-2) + ":" + sec.substr(-2);
+        const pos = this.pos.clone().sub(36, 28);
+        const sky = draw.glin("#09c", "#cff", 0, 0, 0, 64);
+        const min = Math.floor(this.time / 60000) + 100 + "";
+        const sec = Math.floor(this.time / 1000) % 60 + 100 + "";
+        const time = min.substr(-2) + ":" + sec.substr(-2);
         draw.begin()
             .to(pos)
             .rect(72, 64, sky)

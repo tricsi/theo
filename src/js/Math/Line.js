@@ -16,8 +16,8 @@ class Line {
 
     project(dot) {
         let param = -1;
-        let a = dot.clone().sub(this.begin);
-        let b = this.end.clone().sub(this.begin);
+        const a = dot.clone().sub(this.begin);
+        const b = this.end.clone().sub(this.begin);
         if (!this.begin.eq(this.end)) {
             param = (a.x * b.x + a.y * b.y) / (b.x * b.x + b.y * b.y);
         }

@@ -9,10 +9,10 @@ class Camera {
     }
 
     resize() {
-        let ctx = this.ctx,
-            size = this.size,
-            canvas = ctx.canvas,
-            w = canvas.clientWidth,
+        const ctx = this.ctx;
+        const size = this.size;
+        const canvas = ctx.canvas;
+        let w = canvas.clientWidth,
             h = canvas.clientHeight,
             ratio = w / h;
         if (ratio > 1) {
@@ -25,9 +25,9 @@ class Camera {
     }
 
     render(ctx) {
-        let out = this.ctx,
-            canvas = out.canvas,
-            w = canvas.width,
+        const out = this.ctx;
+        const canvas = out.canvas;
+        let w = canvas.width,
             h = canvas.height,
             sw = ctx.canvas.width,
             sh = ctx.canvas.width,

@@ -1,7 +1,7 @@
 class Game {
 
     constructor(draw, config, cam) {
-        let match = location.search.match(/^\?(\d+)$/);
+        const match = location.search.match(/^\?(\d+)$/);
         this.store = JSON.parse(localStorage.getItem("theos") || "{\"time\": 0,\"index\":0}");
         this.index = parseInt(match ? match[1] : this.store.index);
         this.draw = draw;
@@ -48,7 +48,7 @@ class Game {
         const cam = this.cam;
         scene.render(draw);
         if (cam) {
-            cam.pos.add(hero.pos.clone().sub(cam.pos).div(3));
+            cam.pos.add(hero.pos.clone().sub(cam.pos).div(4));
             cam.render(draw.ctx);
         }
     }
@@ -57,8 +57,8 @@ class Game {
         if (values.length < 2) {
             return null;
         }
-        let margin = this.margin,
-            grid = this.grid;
+        const margin = this.margin;
+        const grid = this.grid;
         x = margin + (x || grid / 2);
         y = margin + (y || grid / 2);
         return new Vec(values.shift(), values.shift())
@@ -67,8 +67,8 @@ class Game {
     }
 
     next() {
-        let store = this.store,
-            scene = this.scene;
+        const store = this.store;
+        const scene = this.scene;
         store.time += scene.stoped - scene.started;
         if (++this.index >= this.cfg.length) {
             this.index = 0;
@@ -138,12 +138,11 @@ class Game {
     }
 
     tap() {
-        let scene = this.scene,
-            hero = scene.hero;
+        const scene = this.scene;
         if (!scene.started) {
             scene.start();
         } else if (!scene.stoped) {
-            hero.jump();    
+            scene.hero.jump();    
         }
     }
 

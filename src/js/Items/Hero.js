@@ -14,8 +14,8 @@ class Hero extends Item {
     }
 
     render(draw) {
-        let pos = this.pos.clone().sub(12),
-            vec = new Vec(72, 0);
+        const pos = this.pos.clone().sub(12);
+        let vec = new Vec(72, 0);
         if (this.alive) {
             vec = this.speed.clone().bit();
             if (this.collide.x) {
@@ -30,11 +30,11 @@ class Hero extends Item {
     }
 
     update(room) {
-        let pos = this.pos,
-            size = this.size,
-            speed = this.speed,
-            bound = this.bound,
-            collide = new Vec();
+        const pos = this.pos;
+        const size = this.size;
+        const speed = this.speed;
+        const bound = this.bound;
+        const collide = new Vec();
         this.speed.add(this.velocity).max(this.maxSpeed),
         pos.x += speed.x;
         collide.y = room.collide(pos, size, true);

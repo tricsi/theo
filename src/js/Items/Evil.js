@@ -20,8 +20,8 @@ class Evil extends Item {
     }
 
     render(draw) {
-        let pos = this.pos.clone().sub(12),
-            vec = this.speed.clone().bit();
+        const pos = this.pos.clone().sub(12);
+        const vec = this.speed.clone().bit();
         if (this.collide.x) {
             vec.y = 0;
         }

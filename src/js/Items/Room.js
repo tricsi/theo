@@ -9,14 +9,14 @@ class Room {
     }
 
     map(data) {
-        let grid = this.grid;
-        let margin = this.margin;
-        let lines = this.lines;
-        let dots = [];
-        let i = 0;
-        let j = 0;
-        let x = data[0] * grid;
-        let y = data[1] * grid;
+        const grid = this.grid;
+        const margin = this.margin;
+        const lines = this.lines;
+        const dots = [];
+        let i = 0,
+            j = 0,
+            x = data[0] * grid,
+            y = data[1] * grid;
         dots.push(new Vec(x, y).add(margin));
         for (i = 1; i < data.length - 1; i++) {
             if (i % 2) {
@@ -32,9 +32,9 @@ class Room {
     }
 
     pre(draw) {
+        const color = "rgba(0,0,0,.1)";
         let w = draw.ctx.canvas.width,
-            h = draw.ctx.canvas.height,
-            color = "rgba(0,0,0,.1)";
+            h = draw.ctx.canvas.height;
         draw.begin().rect(w, h, "#420");
         for (let i = 0; i < this.dots.length; i++) {
             draw.path(this.dots[i]).fill(i ? "#420" : "#fec").stroke(0, 2);
