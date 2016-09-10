@@ -1,6 +1,5 @@
 const game = new Game(
     new Draw($("#game").getContext("2d")),
-    new Camera($("#cam").getContext("2d"), 300, "#420"),
     [
         "M3,7,7,6,3|H4,6|D5,6|W6,6|#The door is open.|#I have to escape!",
         "M4,8,6,3,8,1,2,3,4|H4,7|D7,2|#I can jump up walls!",
@@ -22,7 +21,8 @@ const game = new Game(
         "M0,0,3,2,4,0,5,1,6,0,9,2,10,3,9,5,10,6,9,8,10,9,9,10,6,8,5,10,4,9,3,10,0|M1,1,2,3,1|M1,4,2,6,1|M1,7,2,9,1|M3,3,4,5,3|M3,6,4,8,3|M5,2,6,4,5|M5,5,6,7,5|M7,1,8,3,7|M7,4,8,6,7|M7,7,8,9,7|H1,9|D5,4,7,0|C2,1.7,4,1.7|C6,5.7,8,5.7|#Jump around the Gym|#and I'll be at the Gates.",
         "M0,10,4,9,2,1,8,2,3,3,8,4,3,7,8,6,4,5,9,10,10,0,0|G5,9|H2,0|D7,6,3,9|C4,0,5,0|E5,6|B0,0|W6,6|#Final test. Tough,|#but I'm almost out.",
         "M2,4,8,6,2|H4,5|X5,5|R3,5|#Hello Mr Rodman."
-    ]
+    ],
+    new Camera($("#cam").getContext("2d"), 300, "#420")
 );
 
 function update() {

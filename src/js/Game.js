@@ -1,6 +1,6 @@
 class Game {
 
-    constructor(draw, cam, config) {
+    constructor(draw, config, cam) {
         let match = location.search.match(/^\?(\d+)$/);
         this.store = JSON.parse(localStorage.getItem("theos") || "{\"time\": 0,\"index\":0}");
         this.index = parseInt(match ? match[1] : this.store.index);
@@ -35,7 +35,7 @@ class Game {
                 size -= time / 20;
             }
         }
-        if (cam.size != size) {
+        if (cam && cam.size != size) {
             cam.size = size;
             cam.resize();
         }
@@ -47,8 +47,10 @@ class Game {
         const draw = this.draw;
         const cam = this.cam;
         scene.render(draw);
-        cam.pos.add(hero.pos.clone().sub(cam.pos).div(3));
-        cam.render(draw.ctx);
+        if (cam) {
+            cam.pos.add(hero.pos.clone().sub(cam.pos).div(3));
+            cam.render(draw.ctx);
+        }
     }
 
     pos(values, y, x) {
@@ -130,7 +132,9 @@ class Game {
         });
         Math.seed = index;
         this.scene = new Scene(hero, room, door, mobs, text);
-        this.cam.pos = hero.pos.clone();
+        if (this.cam) {
+            this.cam.pos = hero.pos.clone();
+        }
     }
 
     tap() {
