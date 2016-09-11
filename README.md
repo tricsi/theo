@@ -2,14 +2,14 @@
 
 Find the way out from the dungeon in this epic story.
 Try to avoid traps and monsters.
-Glitches may help you.
+May the Glitch be with you.
 
-## Controls
+## CONTROLS
 
 TAP or CLICK or Press SPACE
 
-## The Team
+## THE TEAM
 
     Concept art: Márti, Móric 
     Story telling: Maggie
-    Game development: Csaba Csecskedi
+    Everything else: Csaba
